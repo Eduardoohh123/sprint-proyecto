@@ -15,4 +15,14 @@ public class HomeController {
     public String login() {
         return "login";
     }
+    
+    @GetMapping("/gamer")
+    public String gamer() {
+        return "gamer";
+    }
+    
+    @GetMapping("/anime")
+    public String anime() {
+        return "anime";
+    }
 }

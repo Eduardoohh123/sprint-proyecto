@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime World - Grand Line</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Navbar Fragment -->
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <!-- Hero Section -->
+    <section class="anime-hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-80 pt-5">
+                <div class="col-lg-6 text-white fade-in">
+                    <div class="hero-badge-anime mb-3">
+                        <i class="fas fa-torii-gate me-2"></i>
+                        <span>Anime Zone</span>
+                    </div>
+                    <h1 class="display-2 fw-bold mb-4">Anime World</h1>
+                    <p class="lead mb-4">Tu portal al fascinante universo del anime. Descubre series legendarias, recomendaciones personalizadas, manga, películas y las últimas temporadas.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#series" class="btn-anime-primary">
+                            <i class="fas fa-tv me-2"></i>Ver Series
+                        </a>
+                        <a href="#temporada" class="btn-anime-outline">
+                            <i class="fas fa-calendar-alt me-2"></i>Temporada Actual
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center fade-in-delay">
+                    <div class="anime-hero-icon">
+                        <i class="fas fa-dragon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Series Populares Section -->
+    <section id="series" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-white mb-3">
+                    <i class="fas fa-crown me-2" style="color: #7c3aed;"></i>
+                    Series Legendarias
+                </h2>
+                <p class="lead text-white-50">Los animes que no puedes dejar de ver</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Anime Card 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="anime-card fade-in">
+                        <div class="anime-card-header">
+                            <div class="anime-thumbnail">
+                                <i class="fas fa-image fa-3x"></i>
+                                <span class="anime-badge">12 eps</span>
+                            </div>
+                        </div>
+                        <div class="anime-card-body">
+                            <div class="anime-genre mb-2">
+                                <span class="genre-tag">Acción</span>
+                                <span class="genre-tag">Aventura</span>
+                            </div>
+                            <h3 class="h4 mb-2">Attack on Titan: Final Season</h3>
+                            <div class="anime-meta mb-3">
+                                <span class="meta-item"><i class="fas fa-star text-warning"></i> 9.5/10</span>
+                                <span class="meta-item"><i class="fas fa-fire text-danger"></i> Trending</span>
+                            </div>
+                            <p class="text-white-50 mb-3">La épica conclusión de una de las series más aclamadas. La batalla final por la libertad de la humanidad.</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn-anime-sm btn-anime-primary flex-fill">
+                                    <i class="fas fa-play me-1"></i>Ver ahora
+                                </button>
+                                <button class="btn-anime-sm btn-anime-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anime Card 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="anime-card fade-in">
+                        <div class="anime-card-header">
+                            <div class="anime-thumbnail">
+                                <i class="fas fa-image fa-3x"></i>
+                                <span class="anime-badge badge-new">¡NUEVO!</span>
+                            </div>
+                        </div>
+                        <div class="anime-card-body">
+                            <div class="anime-genre mb-2">
+                                <span class="genre-tag">Shonen</span>
+                                <span class="genre-tag">Fantasía</span>
+                            </div>
+                            <h3 class="h4 mb-2">Jujutsu Kaisen: Season 3</h3>
+                            <div class="anime-meta mb-3">
+                                <span class="meta-item"><i class="fas fa-star text-warning"></i> 9.3/10</span>
+                                <span class="meta-item"><i class="fas fa-crown text-warning"></i> Popular</span>
+                            </div>
+                            <p class="text-white-50 mb-3">Nueva temporada del fenómeno del anime. Más acción, más misterio y batallas épicas contra maldiciones.</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn-anime-sm btn-anime-primary flex-fill">
+                                    <i class="fas fa-play me-1"></i>Ver ahora
+                                </button>
+                                <button class="btn-anime-sm btn-anime-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anime Card 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="anime-card fade-in">
+                        <div class="anime-card-header">
+                            <div class="anime-thumbnail">
+                                <i class="fas fa-image fa-3x"></i>
+                                <span class="anime-badge">24 eps</span>
+                            </div>
+                        </div>
+                        <div class="anime-card-body">
+                            <div class="anime-genre mb-2">
+                                <span class="genre-tag">Romance</span>
+                                <span class="genre-tag">Drama</span>
+                            </div>
+                            <h3 class="h4 mb-2">Your Name: The Series</h3>
+                            <div class="anime-meta mb-3">
+                                <span class="meta-item"><i class="fas fa-star text-warning"></i> 9.8/10</span>
+                                <span class="meta-item"><i class="fas fa-heart text-danger"></i> Favorito</span>
+                            </div>
+                            <p class="text-white-50 mb-3">Una historia de amor que trasciende el tiempo y el espacio. Emociones puras en cada episodio.</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn-anime-sm btn-anime-primary flex-fill">
+                                    <i class="fas fa-play me-1"></i>Ver ahora
+                                </button>
+                                <button class="btn-anime-sm btn-anime-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Temporada Actual Section -->
+    <section id="temporada" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-white mb-3">
+                    <i class="fas fa-calendar-check me-2" style="color: #7c3aed;"></i>
+                    Temporada Otoño 2025
+                </h2>
+                <p class="lead text-white-50">Los estrenos más esperados de la temporada</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Season Card 1 -->
+                <div class="col-lg-6">
+                    <div class="season-card-horizontal fade-in">
+                        <div class="season-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="season-content">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="season-badge">Ep 5 - Viernes</span>
+                                <span class="rating"><i class="fas fa-star text-warning"></i> 9.1</span>
+                            </div>
+                            <h3 class="h5 mb-2">Demon Slayer: Infinity Castle Arc</h3>
+                            <p class="text-white-50 mb-2">Los Hashira enfrentan su batalla más peligrosa dentro del castillo infinito de Muzan.</p>
+                            <div class="season-tags">
+                                <span class="tag">Acción</span>
+                                <span class="tag">Shonen</span>
+                                <span class="tag">Ufotable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Season Card 2 -->
+                <div class="col-lg-6">
+                    <div class="season-card-horizontal fade-in">
+                        <div class="season-icon" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="season-content">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="season-badge">Ep 3 - Sábado</span>
+                                <span class="rating"><i class="fas fa-star text-warning"></i> 8.9</span>
+                            </div>
+                            <h3 class="h5 mb-2">Horimiya: The Missing Pieces</h3>
+                            <p class="text-white-50 mb-2">Nuevos momentos de la pareja favorita del romance escolar con historias inéditas del manga.</p>
+                            <div class="season-tags">
+                                <span class="tag">Romance</span>
+                                <span class="tag">Slice of Life</span>
+                                <span class="tag">CloverWorks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Season Card 3 -->
+                <div class="col-lg-6">
+                    <div class="season-card-horizontal fade-in">
+                        <div class="season-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <i class="fas fa-fist-raised"></i>
+                        </div>
+                        <div class="season-content">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="season-badge">Ep 8 - Domingo</span>
+                                <span class="rating"><i class="fas fa-star text-warning"></i> 9.4</span>
+                            </div>
+                            <h3 class="h5 mb-2">One Punch Man: Season 3</h3>
+                            <p class="text-white-50 mb-2">Saitama regresa con más villanos imposibles y batallas que desafían toda lógica.</p>
+                            <div class="season-tags">
+                                <span class="tag">Comedia</span>
+                                <span class="tag">Acción</span>
+                                <span class="tag">MAPPA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Season Card 4 -->
+                <div class="col-lg-6">
+                    <div class="season-card-horizontal fade-in">
+                        <div class="season-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="season-content">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="season-badge">Ep 1 - Miércoles</span>
+                                <span class="rating"><i class="fas fa-star text-warning"></i> 8.7</span>
+                            </div>
+                            <h3 class="h5 mb-2">Frieren: Beyond Journey's End S2</h3>
+                            <p class="text-white-50 mb-2">La elfa inmortal continúa su viaje introspectivo explorando nuevos territorios y recuerdos.</p>
+                            <div class="season-tags">
+                                <span class="tag">Fantasía</span>
+                                <span class="tag">Drama</span>
+                                <span class="tag">Madhouse</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Películas Section -->
+    <section id="peliculas" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-white mb-3">
+                    <i class="fas fa-film me-2" style="color: #7c3aed;"></i>
+                    Películas Destacadas
+                </h2>
+                <p class="lead text-white-50">Obras maestras del cine de animación</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Movie Card -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="movie-card fade-in">
+                        <div class="movie-thumbnail">
+                            <i class="fas fa-image fa-2x"></i>
+                            <div class="movie-overlay">
+                                <button class="btn-play">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h4 class="h6 mb-1">Suzume no Tojimari</h4>
+                            <div class="movie-rating">
+                                <i class="fas fa-star text-warning"></i>
+                                <span>9.6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="movie-card fade-in">
+                        <div class="movie-thumbnail">
+                            <i class="fas fa-image fa-2x"></i>
+                            <div class="movie-overlay">
+                                <button class="btn-play">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h4 class="h6 mb-1">Spirited Away 4K</h4>
+                            <div class="movie-rating">
+                                <i class="fas fa-star text-warning"></i>
+                                <span>9.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="movie-card fade-in">
+                        <div class="movie-thumbnail">
+                            <i class="fas fa-image fa-2x"></i>
+                            <div class="movie-overlay">
+                                <button class="btn-play">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h4 class="h6 mb-1">Violet Evergarden Movie</h4>
+                            <div class="movie-rating">
+                                <i class="fas fa-star text-warning"></i>
+                                <span>9.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="movie-card fade-in">
+                        <div class="movie-thumbnail">
+                            <i class="fas fa-image fa-2x"></i>
+                            <div class="movie-overlay">
+                                <button class="btn-play">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="movie-info">
+                            <h4 class="h6 mb-1">Weathering With You</h4>
+                            <div class="movie-rating">
+                                <i class="fas fa-star text-warning"></i>
+                                <span>9.4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Géneros Section -->
+    <section id="generos" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-white mb-3">
+                    <i class="fas fa-th-large me-2" style="color: #7c3aed;"></i>
+                    Explora por Género
+                </h2>
+                <p class="lead text-white-50">Encuentra el anime perfecto para ti</p>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="genre-card fade-in">
+                        <i class="fas fa-fist-raised"></i>
+                        <span>Shonen</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="genre-card fade-in">
+                        <i class="fas fa-heart"></i>
+                        <span>Romance</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="genre-card fade-in">
+                        <i class="fas fa-laugh"></i>
+                        <span>Comedia</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="genre-card fade-in">
+                        <i class="fas fa-ghost"></i>
+                        <span>Horror</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="genre-card fade-in">
+                        <i class="fas fa-dragon"></i>
+                        <span>Fantasía</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="genre-card fade-in">
+                        <i class="fas fa-robot"></i>
+                        <span>Sci-Fi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-anime-section py-5">
+        <div class="container">
+            <div class="cta-anime-card text-center">
+                <i class="fas fa-torii-gate fa-3x mb-4" style="color: #7c3aed;"></i>
+                <h2 class="display-5 fw-bold text-white mb-3">Tu Lista Personalizada</h2>
+                <p class="lead text-white-50 mb-4">Crea tu perfil, sigue tus series favoritas y recibe recomendaciones basadas en tus gustos.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <button class="btn-anime-primary">
+                        <i class="fas fa-user-plus me-2"></i>Crear Cuenta
+                    </button>
+                    <button class="btn-anime-outline">
+                        <i class="fas fa-list me-2"></i>Ver Mi Lista
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Fragment -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
