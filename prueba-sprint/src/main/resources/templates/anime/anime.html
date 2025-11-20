@@ -10,32 +10,150 @@
 </head>
 <body>
     <!-- Navbar Fragment -->
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <!-- Hero Section -->
-    <section class="anime-hero-section">
+    <section class="anime-hero-section" style="padding-top: 100px;">
         <div class="container">
-            <div class="row align-items-center min-vh-80 pt-5">
+            <div class="row align-items-center min-vh-80">
                 <div class="col-lg-6 text-white fade-in">
                     <div class="hero-badge-anime mb-3">
                         <i class="fas fa-torii-gate me-2"></i>
                         <span>Anime Zone</span>
                     </div>
-                    <h1 class="display-2 fw-bold mb-4">Anime World</h1>
-                    <p class="lead mb-4">Tu portal al fascinante universo del anime. Descubre series legendarias, recomendaciones personalizadas, manga, películas y las últimas temporadas.</p>
-                    <div class="d-flex gap-3 flex-wrap">
-                        <a href="#series" class="btn-anime-primary">
+                    <h1 class="display-3 display-md-2 fw-bold mb-3 mb-md-4">Anime World</h1>
+                    <p class="lead mb-3 mb-md-4">Tu portal al fascinante universo del anime. Descubre series legendarias, recomendaciones personalizadas, manga, películas y las últimas temporadas.</p>
+                    <div class="d-flex gap-2 gap-md-3 flex-wrap">
+                        <a href="#series" class="btn-anime-primary btn-sm btn-md-lg">
                             <i class="fas fa-tv me-2"></i>Ver Series
                         </a>
-                        <a href="#temporada" class="btn-anime-outline">
+                        <a href="#temporada" class="btn-anime-outline btn-sm btn-md-lg">
                             <i class="fas fa-calendar-alt me-2"></i>Temporada Actual
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center fade-in-delay">
+                <div class="col-lg-6 text-center fade-in-delay d-none d-lg-block">
                     <div class="anime-hero-icon">
                         <i class="fas fa-dragon"></i>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Bar Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="mx-auto" style="max-width: 1000px;">
+                <div class="p-4 rounded-4" style="background: rgba(15, 23, 42, 0.3); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <form action="/anime" method="get">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small">
+                                    <i class="fas fa-search me-2"></i>Buscar anime
+                                </label>
+                                <input type="text" 
+                                       name="search" 
+                                       class="form-control glass-input border-0" 
+                                       placeholder="Buscar por título..."
+                                       style="background: rgba(255, 255, 255, 0.1); color: white; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small">
+                                    <i class="fas fa-filter me-2"></i>Género
+                                </label>
+                                <input type="text" 
+                                       name="genre" 
+                                       class="form-control glass-input border-0" 
+                                       placeholder="Ej: Acción, Shonen..."
+                                       style="background: rgba(255, 255, 255, 0.1); color: white; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn-anime-primary flex-fill" style="padding: 0.75rem 1rem;">
+                                        <i class="fas fa-search me-2"></i>Buscar
+                                    </button>
+                                    <a href="/anime-home" class="btn-anime-outline" style="padding: 0.75rem 1rem; text-decoration: none; white-space: nowrap;" title="Limpiar filtros">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Filters -->
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small">
+                                    <i class="fas fa-tv me-2"></i>Tipo
+                                </label>
+                                <select name="type" class="form-select glass-input border-0" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 0.75rem 1rem;">
+                                    <option value="" style="background: #1e293b;">Todos</option>
+                                    <option value="TV" style="background: #1e293b;">TV</option>
+                                    <option value="MOVIE" style="background: #1e293b;">Película</option>
+                                    <option value="OVA" style="background: #1e293b;">OVA</option>
+                                    <option value="ONA" style="background: #1e293b;">ONA</option>
+                                    <option value="SPECIAL" style="background: #1e293b;">Especial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small">
+                                    <i class="fas fa-signal me-2"></i>Estado
+                                </label>
+                                <select name="status" class="form-select glass-input border-0" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 0.75rem 1rem;">
+                                    <option value="" style="background: #1e293b;">Todos</option>
+                                    <option value="AIRING" style="background: #1e293b;">En emisión</option>
+                                    <option value="FINISHED" style="background: #1e293b;">Finalizado</option>
+                                    <option value="UPCOMING" style="background: #1e293b;">Próximamente</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small">
+                                    <i class="fas fa-building me-2"></i>Estudio
+                                </label>
+                                <input type="text" 
+                                       name="studio" 
+                                       class="form-control glass-input border-0" 
+                                       placeholder="Ej: Ufotable, MAPPA..."
+                                       style="background: rgba(255, 255, 255, 0.1); color: white; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-white-50 small">
+                                    <i class="fas fa-sort me-2"></i>Ordenar por
+                                </label>
+                                <select name="sort" class="form-select glass-input border-0" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 0.75rem 1rem;">
+                                    <option value="" style="background: #1e293b;">Predeterminado</option>
+                                    <option value="rating" style="background: #1e293b;">Mejor valorados</option>
+                                    <option value="popular" style="background: #1e293b;">Más populares</option>
+                                    <option value="favorites" style="background: #1e293b;">Más favoritos</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Filters -->
+                        <div class="mt-3 pt-3 border-top border-secondary">
+                            <span class="text-white-50 small me-2">
+                                <i class="fas fa-bolt me-1"></i>Filtros rápidos:
+                            </span>
+                            <a href="/anime?genre=Acción" class="badge me-1 mb-1" style="background: rgba(239, 68, 68, 0.3); border: 1px solid #ef4444; color: #fca5a5; text-decoration: none; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-fist-raised me-1"></i>Acción
+                            </a>
+                            <a href="/anime?genre=Romance" class="badge me-1 mb-1" style="background: rgba(236, 72, 153, 0.3); border: 1px solid #ec4899; color: #f9a8d4; text-decoration: none; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-heart me-1"></i>Romance
+                            </a>
+                            <a href="/anime?genre=Shonen" class="badge me-1 mb-1" style="background: rgba(251, 191, 36, 0.3); border: 1px solid #fbbf24; color: #fcd34d; text-decoration: none; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-fire me-1"></i>Shonen
+                            </a>
+                            <a href="/anime?genre=Fantasía" class="badge me-1 mb-1" style="background: rgba(124, 58, 237, 0.3); border: 1px solid #7c3aed; color: #c4b5fd; text-decoration: none; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-dragon me-1"></i>Fantasía
+                            </a>
+                            <a href="/anime?status=AIRING" class="badge me-1 mb-1" style="background: rgba(34, 197, 94, 0.3); border: 1px solid #22c55e; color: #86efac; text-decoration: none; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-signal me-1"></i>En emisión
+                            </a>
+                            <a href="/anime?type=MOVIE" class="badge me-1 mb-1" style="background: rgba(59, 130, 246, 0.3); border: 1px solid #3b82f6; color: #93c5fd; text-decoration: none; padding: 0.375rem 0.75rem;">
+                                <i class="fas fa-film me-1"></i>Películas
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -53,94 +171,45 @@
             </div>
 
             <div class="row g-4">
-                <!-- Anime Card 1 -->
-                <div class="col-md-6 col-lg-4">
+                <!-- Anime Card Dynamic -->
+                <div class="col-12 col-md-6 col-lg-4" th:each="anime : ${featuredAnimes}">
                     <div class="anime-card fade-in">
                         <div class="anime-card-header">
                             <div class="anime-thumbnail">
-                                <i class="fas fa-image fa-3x"></i>
-                                <span class="anime-badge">12 eps</span>
+                                <img th:if="${anime.posterUrl != null}" 
+                                     th:src="${anime.posterUrl}" 
+                                     th:alt="${anime.titleRomaji}"
+                                     class="img-fluid w-100 h-100" 
+                                     style="object-fit: cover;">
+                                <i th:unless="${anime.posterUrl != null}" class="fas fa-torii-gate fa-3x"></i>
+                                <span class="anime-badge" th:if="${anime.totalEpisodes != null}" 
+                                      th:text="${anime.totalEpisodes + ' eps'}">12 eps</span>
+                                <span class="anime-badge badge-new" th:if="${anime.status != null && anime.status.name() == 'AIRING'}">¡EN EMISIÓN!</span>
                             </div>
                         </div>
                         <div class="anime-card-body">
-                            <div class="anime-genre mb-2">
-                                <span class="genre-tag">Acción</span>
-                                <span class="genre-tag">Aventura</span>
+                            <div class="anime-genre mb-2" th:if="${anime.genres != null}">
+                                <span class="genre-tag" th:each="genre, iterStat : ${#strings.arraySplit(anime.genres, ',')}" 
+                                      th:if="${iterStat.index < 2}"
+                                      th:text="${#strings.trim(genre)}">Género</span>
                             </div>
-                            <h3 class="h4 mb-2">Attack on Titan: Final Season</h3>
+                            <h3 class="h4 mb-2 text-truncate" th:text="${anime.titleRomaji}">Anime Title</h3>
                             <div class="anime-meta mb-3">
-                                <span class="meta-item"><i class="fas fa-star text-warning"></i> 9.5/10</span>
-                                <span class="meta-item"><i class="fas fa-fire text-danger"></i> Trending</span>
+                                <span class="meta-item" th:if="${anime.rating != null}">
+                                    <i class="fas fa-star text-warning"></i> 
+                                    <span th:text="${anime.rating + '/10'}">9.5/10</span>
+                                </span>
+                                <span class="meta-item" th:if="${anime.isFeatured}">
+                                    <i class="fas fa-fire text-danger"></i> Destacado
+                                </span>
                             </div>
-                            <p class="text-white-50 mb-3">La épica conclusión de una de las series más aclamadas. La batalla final por la libertad de la humanidad.</p>
+                            <p class="text-white-50 mb-3 anime-synopsis" 
+                               th:text="${#strings.abbreviate(anime.synopsis, 120)}">Sinopsis del anime.</p>
                             <div class="d-flex gap-2">
-                                <button class="btn-anime-sm btn-anime-primary flex-fill">
+                                <a th:href="@{/anime/{id}(id=${anime.id})}" 
+                                   class="btn-anime-sm btn-anime-primary flex-fill text-decoration-none">
                                     <i class="fas fa-play me-1"></i>Ver ahora
-                                </button>
-                                <button class="btn-anime-sm btn-anime-outline">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Anime Card 2 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="anime-card fade-in">
-                        <div class="anime-card-header">
-                            <div class="anime-thumbnail">
-                                <i class="fas fa-image fa-3x"></i>
-                                <span class="anime-badge badge-new">¡NUEVO!</span>
-                            </div>
-                        </div>
-                        <div class="anime-card-body">
-                            <div class="anime-genre mb-2">
-                                <span class="genre-tag">Shonen</span>
-                                <span class="genre-tag">Fantasía</span>
-                            </div>
-                            <h3 class="h4 mb-2">Jujutsu Kaisen: Season 3</h3>
-                            <div class="anime-meta mb-3">
-                                <span class="meta-item"><i class="fas fa-star text-warning"></i> 9.3/10</span>
-                                <span class="meta-item"><i class="fas fa-crown text-warning"></i> Popular</span>
-                            </div>
-                            <p class="text-white-50 mb-3">Nueva temporada del fenómeno del anime. Más acción, más misterio y batallas épicas contra maldiciones.</p>
-                            <div class="d-flex gap-2">
-                                <button class="btn-anime-sm btn-anime-primary flex-fill">
-                                    <i class="fas fa-play me-1"></i>Ver ahora
-                                </button>
-                                <button class="btn-anime-sm btn-anime-outline">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Anime Card 3 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="anime-card fade-in">
-                        <div class="anime-card-header">
-                            <div class="anime-thumbnail">
-                                <i class="fas fa-image fa-3x"></i>
-                                <span class="anime-badge">24 eps</span>
-                            </div>
-                        </div>
-                        <div class="anime-card-body">
-                            <div class="anime-genre mb-2">
-                                <span class="genre-tag">Romance</span>
-                                <span class="genre-tag">Drama</span>
-                            </div>
-                            <h3 class="h4 mb-2">Your Name: The Series</h3>
-                            <div class="anime-meta mb-3">
-                                <span class="meta-item"><i class="fas fa-star text-warning"></i> 9.8/10</span>
-                                <span class="meta-item"><i class="fas fa-heart text-danger"></i> Favorito</span>
-                            </div>
-                            <p class="text-white-50 mb-3">Una historia de amor que trasciende el tiempo y el espacio. Emociones puras en cada episodio.</p>
-                            <div class="d-flex gap-2">
-                                <button class="btn-anime-sm btn-anime-primary flex-fill">
-                                    <i class="fas fa-play me-1"></i>Ver ahora
-                                </button>
+                                </a>
                                 <button class="btn-anime-sm btn-anime-outline">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -165,7 +234,7 @@
 
             <div class="row g-4">
                 <!-- Season Card 1 -->
-                <div class="col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="season-card-horizontal fade-in">
                         <div class="season-icon">
                             <i class="fas fa-bolt"></i>
@@ -187,7 +256,7 @@
                 </div>
 
                 <!-- Season Card 2 -->
-                <div class="col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="season-card-horizontal fade-in">
                         <div class="season-icon" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
                             <i class="fas fa-heart"></i>
@@ -209,7 +278,7 @@
                 </div>
 
                 <!-- Season Card 3 -->
-                <div class="col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="season-card-horizontal fade-in">
                         <div class="season-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
                             <i class="fas fa-fist-raised"></i>
@@ -231,7 +300,7 @@
                 </div>
 
                 <!-- Season Card 4 -->
-                <div class="col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="season-card-horizontal fade-in">
                         <div class="season-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
                             <i class="fas fa-book-open"></i>
@@ -268,7 +337,7 @@
 
             <div class="row g-4">
                 <!-- Movie Card -->
-                <div class="col-md-6 col-lg-3">
+                <div class="col-6 col-md-4 col-lg-3">
                     <div class="movie-card fade-in">
                         <div class="movie-thumbnail">
                             <i class="fas fa-image fa-2x"></i>
@@ -288,7 +357,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-6 col-md-4 col-lg-3">
                     <div class="movie-card fade-in">
                         <div class="movie-thumbnail">
                             <i class="fas fa-image fa-2x"></i>
@@ -308,7 +377,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-6 col-md-4 col-lg-3">
                     <div class="movie-card fade-in">
                         <div class="movie-thumbnail">
                             <i class="fas fa-image fa-2x"></i>
@@ -328,7 +397,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-6 col-md-4 col-lg-3">
                     <div class="movie-card fade-in">
                         <div class="movie-thumbnail">
                             <i class="fas fa-image fa-2x"></i>
@@ -423,7 +492,7 @@
     </section>
 
     <!-- Footer Fragment -->
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

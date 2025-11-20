@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Anime - Grand Line</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Enhanced Search Section -->
+    <section class="py-5" style="margin-top: 80px; background: transparent;">
+        <div class="container">
+            <form method="get" action="/anime">
+                <!-- Title and Counter -->
+                <div class="text-center mb-4">
+                    <img src="/images/logo.png" alt="Grand Line Logo" class="mb-3" style="height: 70px; width: auto;">
+                    <h2 class="text-white fw-bold mb-2" style="font-size: 1.75rem; letter-spacing: 0.5px;">
+                        Catálogo de Anime
+                    </h2>
+                    <p class="text-white-50 mb-0">
+                        <span th:text="${animes.size()}">0</span> animes disponibles
+                    </p>
+                </div>
+
+                <!-- Main Search Container -->
+                <div class="p-4 rounded-4 shadow-lg" style="background: transparent; backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); max-width: 1100px; margin: 0 auto;">
+                    
+                    <!-- Primary Search Row -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-lg-5">
+                            <div class="position-relative">
+                                <i class="fas fa-search position-absolute top-50 translate-middle-y ms-3 text-white-50" style="z-index: 10;"></i>
+                                <input type="text" 
+                                       name="search" 
+                                       class="form-control border-0 ps-5 py-3 rounded-3" 
+                                       placeholder="Buscar por título..."
+                                       th:value="${search}"
+                                       style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px); transition: all 0.3s ease;"
+                                       onfocus="this.style.background='rgba(255, 255, 255, 0.18)'; this.style.boxShadow='0 0 0 3px rgba(124, 58, 237, 0.3)'"
+                                       onblur="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.boxShadow='none'">
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 col-lg-2">
+                            <select name="type" class="form-select border-0 py-3 rounded-3" style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                                <option value="" style="background: #1e293b;">Tipo</option>
+                                <option value="TV" th:selected="${type == 'TV'}" style="background: #1e293b;">📺 TV</option>
+                                <option value="MOVIE" th:selected="${type == 'MOVIE'}" style="background: #1e293b;">🎬 Película</option>
+                                <option value="OVA" th:selected="${type == 'OVA'}" style="background: #1e293b;">💿 OVA</option>
+                                <option value="ONA" th:selected="${type == 'ONA'}" style="background: #1e293b;">🌐 ONA</option>
+                                <option value="SPECIAL" th:selected="${type == 'SPECIAL'}" style="background: #1e293b;">⭐ Especial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-6 col-lg-2">
+                            <select name="status" class="form-select border-0 py-3 rounded-3" style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                                <option value="" style="background: #1e293b;">Estado</option>
+                                <option value="AIRING" th:selected="${status == 'AIRING'}" style="background: #1e293b;">🟢 En emisión</option>
+                                <option value="FINISHED" th:selected="${status == 'FINISHED'}" style="background: #1e293b;">⚫ Finalizado</option>
+                                <option value="UPCOMING" th:selected="${status == 'UPCOMING'}" style="background: #1e293b;">🔵 Próximamente</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12 col-lg-3">
+                            <div class="d-flex gap-2 h-100">
+                                <button type="submit" class="btn flex-fill py-3 rounded-3 border-0 fw-semibold" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);"
+                                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(124, 58, 237, 0.4)'"
+                                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(124, 58, 237, 0.3)'">
+                                    <i class="fas fa-search me-2"></i>Buscar
+                                </button>
+                                <a href="/anime" class="btn btn-outline-light py-3 px-4 rounded-3 border-0 d-flex align-items-center justify-content-center" 
+                                   style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); transition: all 0.3s ease;"
+                                   title="Limpiar filtros"
+                                   onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='rotate(90deg)'"
+                                   onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='rotate(0)'">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Secondary Filters Row -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-md-5">
+                            <div class="position-relative">
+                                <i class="fas fa-tags position-absolute top-50 translate-middle-y ms-3 text-white-50" style="z-index: 10;"></i>
+                                <input type="text" 
+                                       name="genre" 
+                                       class="form-control border-0 ps-5 py-3 rounded-3" 
+                                       placeholder="Género (Ej: Acción, Shonen...)"
+                                       th:value="${genre}"
+                                       style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 col-md-4">
+                            <div class="position-relative">
+                                <i class="fas fa-building position-absolute top-50 translate-middle-y ms-3 text-white-50" style="z-index: 10;"></i>
+                                <input type="text" 
+                                       name="studio" 
+                                       class="form-control border-0 ps-5 py-3 rounded-3" 
+                                       placeholder="Estudio"
+                                       th:value="${studio}"
+                                       style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 col-md-3">
+                            <select name="sort" class="form-select border-0 py-3 rounded-3" style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                                <option value="" style="background: #1e293b;">🔽 Ordenar por</option>
+                                <option value="rating" th:selected="${sort == 'rating'}" style="background: #1e293b;">⭐ Mejor valorados</option>
+                                <option value="popular" th:selected="${sort == 'popular'}" style="background: #1e293b;">🔥 Más populares</option>
+                                <option value="favorites" th:selected="${sort == 'favorites'}" style="background: #1e293b;">❤️ Más favoritos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Quick Filters -->
+                    <div class="pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.1) !important;">
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            <span class="text-white-50 small fw-semibold me-2">
+                                <i class="fas fa-bolt me-1"></i>Accesos rápidos:
+                            </span>
+                            <a href="/anime?genre=Acción" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-fire me-1"></i>Acción
+                            </a>
+                            <a href="/anime?genre=Romance" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(236, 72, 153, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-heart me-1"></i>Romance
+                            </a>
+                            <a href="/anime?genre=Shonen" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(245, 158, 11, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-fist-raised me-1"></i>Shonen
+                            </a>
+                            <a href="/anime?genre=Seinen" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(6, 182, 212, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-user-tie me-1"></i>Seinen
+                            </a>
+                            <a href="/anime?genre=Fantasía" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-hat-wizard me-1"></i>Fantasía
+                            </a>
+                            <a href="/anime?status=AIRING" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-signal me-1"></i>En emisión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="py-5">
+        <div class="container">
+            <!-- No results message -->
+            <div th:if="${animes.isEmpty()}" class="text-center py-5">
+                <i class="fas fa-search fa-4x text-white-50 mb-3"></i>
+                <h3 class="text-white mb-3">No se encontraron animes</h3>
+                <p class="text-white-50">Intenta con otros términos de búsqueda</p>
+                <a href="/anime" class="btn-anime-primary mt-3">Ver todo el catálogo</a>
+            </div>
+
+            <!-- Anime Grid -->
+            <div class="row g-4" th:unless="${animes.isEmpty()}">
+                <div class="col-6 col-md-4 col-lg-3 col-xl-3" th:each="anime : ${animes}">
+                    <div class="gamer-card fade-in h-100 d-flex flex-column" style="border: 2px solid rgba(124, 58, 237, 0.3);">
+                        <!-- Badge -->
+                        <div class="position-relative">
+                            <span th:if="${anime.status != null && anime.status.name() == 'AIRING'}"
+                                  class="position-absolute top-0 start-0 m-2 badge small bg-success" 
+                                  style="font-size: 0.6rem; z-index: 10;">
+                                En emisión
+                            </span>
+                            <span th:if="${anime.status != null && anime.status.name() == 'FINISHED'}"
+                                  class="position-absolute top-0 start-0 m-2 badge small bg-secondary" 
+                                  style="font-size: 0.6rem; z-index: 10;">
+                                Finalizado
+                            </span>
+                            <span th:if="${anime.status != null && anime.status.name() == 'UPCOMING'}"
+                                  class="position-absolute top-0 start-0 m-2 badge small bg-info" 
+                                  style="font-size: 0.6rem; z-index: 10;">
+                                Próximamente
+                            </span>
+                            <span class="position-absolute top-0 end-0 m-2 badge small" 
+                                  th:if="${anime.isFeatured}"
+                                  style="background: #7c3aed; font-size: 0.6rem; z-index: 10;">
+                                <i class="fas fa-star"></i> Destacado
+                            </span>
+                        </div>
+
+                        <!-- Anime Poster -->
+                        <div class="gamer-card-header">
+                            <div class="game-thumbnail" style="height: 300px;">
+                                <img th:if="${anime.posterUrl != null}" 
+                                     th:src="${anime.posterUrl}" 
+                                     alt="Anime poster" 
+                                     class="img-fluid"
+                                     style="height: 100%; width: 100%; object-fit: cover;">
+                                <i th:unless="${anime.posterUrl != null}" 
+                                   class="fas fa-torii-gate fa-3x text-white-50"></i>
+                            </div>
+                        </div>
+
+                        <!-- Anime Info -->
+                        <div class="gamer-card-body flex-fill d-flex flex-column">
+                            <h5 class="mb-2 text-white small" th:text="${anime.titleRomaji}">Anime Title</h5>
+                            
+                            <!-- Meta Info -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge" style="background: rgba(124, 58, 237, 0.8);" th:if="${anime.type != null}">
+                                    <i class="fas fa-tv me-1"></i>
+                                    <span th:text="${anime.type}">Type</span>
+                                </span>
+                                <span class="text-warning small" th:if="${anime.rating != null}">
+                                    <i class="fas fa-star"></i>
+                                    <span th:text="${anime.rating}">0</span>/10
+                                </span>
+                            </div>
+
+                            <!-- Genres -->
+                            <div class="mb-2" th:if="${anime.genres != null}">
+                                <small class="text-white-50" th:text="${#strings.abbreviate(anime.genres, 30)}">Géneros</small>
+                            </div>
+
+                            <p class="text-white-50 small mb-3" 
+                               th:text="${#strings.abbreviate(anime.synopsis, 80)}">
+                                Synopsis
+                            </p>
+
+                            <!-- Stats -->
+                            <div class="d-flex justify-content-between text-white-50 small mb-3">
+                                <span>
+                                    <i class="fas fa-eye me-1"></i>
+                                    <span th:text="${anime.viewCount}">0</span>
+                                </span>
+                                <span>
+                                    <i class="fas fa-heart me-1"></i>
+                                    <span th:text="${anime.favoriteCount}">0</span>
+                                </span>
+                                <span th:if="${anime.totalEpisodes != null}">
+                                    <i class="fas fa-film me-1"></i>
+                                    <span th:text="${anime.totalEpisodes}">0</span> eps
+                                </span>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="d-flex gap-2 mt-auto">
+                                <a th:href="@{/anime/{id}(id=${anime.id})}" 
+                                   class="btn-gamer-sm flex-fill text-center text-decoration-none"
+                                   style="background: rgba(124, 58, 237, 0.8);">
+                                    <i class="fas fa-play me-1"></i>Ver
+                                </a>
+                                <button class="btn-gamer-sm btn-gamer-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="btn-gamer-sm btn-gamer-outline">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${anime.titleRomaji} + ' - Episodio ' + ${episode.episodeNumber}">Watch Episode</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body style="background: #0f172a;">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Player Section -->
+    <section class="py-4">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Video Player -->
+                <div class="col-lg-9">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb" class="mb-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/anime" class="text-purple">Anime</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a th:href="@{/anime/{id}(id=${anime.id})}" class="text-purple" th:text="${anime.titleRomaji}">Anime</a>
+                            </li>
+                            <li class="breadcrumb-item active text-white" aria-current="page" th:text="'Episodio ' + ${episode.episodeNumber}">
+                                Episode
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <!-- Video Player Card -->
+                    <div class="card glass-card mb-4">
+                        <div class="card-body p-0">
+                            <div class="ratio ratio-16x9" style="background: #000;">
+                                <!-- Video Player - Replace with actual video player -->
+                                <div th:if="${episode.videoUrl != null}" class="d-flex align-items-center justify-content-center">
+                                    <video controls class="w-100 h-100" th:src="${episode.videoUrl}">
+                                        Tu navegador no soporta el elemento de video.
+                                    </video>
+                                </div>
+                                <div th:unless="${episode.videoUrl != null}" class="d-flex flex-column align-items-center justify-content-center text-white">
+                                    <i class="fas fa-play-circle fa-5x mb-3 text-purple"></i>
+                                    <h4>Video no disponible</h4>
+                                    <p class="text-white-50">Este episodio estará disponible pronto</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Episode Info -->
+                    <div class="card glass-card mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h2 class="text-white mb-2">
+                                        <span class="badge bg-purple me-2" th:text="'Episodio ' + ${episode.episodeNumber}">Ep 1</span>
+                                        <span th:text="${episode.title}">Episode Title</span>
+                                    </h2>
+                                    <div class="text-white-50">
+                                        <i class="fas fa-eye me-1"></i>
+                                        <span th:text="${episode.viewCount}">0</span> vistas
+                                        <span th:if="${episode.duration != null}" class="ms-3">
+                                            <i class="fas fa-clock me-1"></i>
+                                            <span th:text="${episode.duration}">0</span> min
+                                        </span>
+                                        <span th:if="${episode.releaseDate != null}" class="ms-3">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            <span th:text="${#temporals.format(episode.releaseDate, 'dd/MM/yyyy')}">Date</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-light">
+                                        <i class="fas fa-share-alt me-1"></i>Compartir
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p class="text-white-50 lead" th:if="${episode.description != null}" th:text="${episode.description}">
+                                Episode description goes here...
+                            </p>
+
+                            <!-- Navigation Buttons -->
+                            <div class="d-flex gap-3 mt-4">
+                                <a th:if="${episode.episodeNumber > 1}" 
+                                   th:href="@{/anime/{animeId}/episode/{episodeNumber}(animeId=${anime.id}, episodeNumber=${episode.episodeNumber - 1})}"
+                                   class="btn btn-outline-light">
+                                    <i class="fas fa-chevron-left me-2"></i>Episodio Anterior
+                                </a>
+                                <a th:if="${episode.episodeNumber < anime.totalEpisodes}" 
+                                   th:href="@{/anime/{animeId}/episode/{episodeNumber}(animeId=${anime.id}, episodeNumber=${episode.episodeNumber + 1})}"
+                                   class="btn-anime-primary ms-auto">
+                                    Siguiente Episodio<i class="fas fa-chevron-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anime Info -->
+                    <div class="card glass-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start gap-3">
+                                <img th:if="${anime.posterUrl != null}" 
+                                     th:src="${anime.posterUrl}" 
+                                     alt="Poster"
+                                     style="width: 100px; height: 150px; object-fit: cover; border-radius: 8px;">
+                                <div class="flex-fill">
+                                    <h4 class="text-white mb-2" th:text="${anime.titleRomaji}">Anime Title</h4>
+                                    <p class="text-white-50 mb-3" th:text="${#strings.abbreviate(anime.synopsis, 200)}">
+                                        Synopsis
+                                    </p>
+                                    <div class="d-flex gap-3 flex-wrap">
+                                        <span class="text-white-50">
+                                            <i class="fas fa-star text-warning me-1"></i>
+                                            <span th:text="${anime.rating}">0</span>/10
+                                        </span>
+                                        <span class="text-white-50">
+                                            <i class="fas fa-film me-1"></i>
+                                            <span th:text="${anime.totalEpisodes}">0</span> episodios
+                                        </span>
+                                        <span class="text-white-50">
+                                            <i class="fas fa-eye me-1"></i>
+                                            <span th:text="${anime.viewCount}">0</span> vistas
+                                        </span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <a th:href="@{/anime/{id}(id=${anime.id})}" class="btn btn-sm btn-outline-light">
+                                            <i class="fas fa-info-circle me-1"></i>Ver información completa
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Episodes Sidebar -->
+                <div class="col-lg-3">
+                    <div class="card glass-card" style="position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto;">
+                        <div class="card-body">
+                            <h5 class="text-white mb-3">
+                                <i class="fas fa-list me-2"></i>
+                                Todos los episodios
+                                <span class="badge bg-purple ms-2" th:text="${allEpisodes.size()}">0</span>
+                            </h5>
+                            
+                            <div class="episode-list">
+                                <a th:each="ep : ${allEpisodes}" 
+                                   th:href="@{/anime/{animeId}/episode/{episodeNumber}(animeId=${anime.id}, episodeNumber=${ep.episodeNumber})}"
+                                   class="episode-item d-flex align-items-center gap-3 p-2 rounded mb-2 text-decoration-none"
+                                   th:classappend="${ep.episodeNumber == episode.episodeNumber} ? 'active-episode' : ''"
+                                   style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(124, 58, 237, 0.3); transition: all 0.3s;">
+                                    
+                                    <div class="episode-mini-thumbnail" style="width: 80px; height: 45px; background: rgba(124, 58, 237, 0.2); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <img th:if="${ep.thumbnailUrl != null}" 
+                                             th:src="${ep.thumbnailUrl}" 
+                                             class="w-100 h-100" 
+                                             style="object-fit: cover; border-radius: 4px;"
+                                             alt="Thumbnail">
+                                        <span th:unless="${ep.thumbnailUrl != null}" class="badge bg-purple" th:text="${ep.episodeNumber}">1</span>
+                                    </div>
+                                    
+                                    <div class="flex-fill">
+                                        <div class="text-white small fw-bold mb-1" th:text="'Episodio ' + ${ep.episodeNumber}">Ep 1</div>
+                                        <div class="text-white-50" style="font-size: 0.75rem;" th:text="${#strings.abbreviate(ep.title, 40)}">Title</div>
+                                        <div class="text-white-50" style="font-size: 0.7rem;" th:if="${ep.duration != null}">
+                                            <i class="fas fa-clock me-1"></i>
+                                            <span th:text="${ep.duration}">0</span> min
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .active-episode {
+            background: rgba(124, 58, 237, 0.5) !important;
+            border-color: rgba(124, 58, 237, 0.8) !important;
+        }
+        .episode-item:hover {
+            background: rgba(124, 58, 237, 0.3) !important;
+            transform: translateX(5px);
+        }
+        .breadcrumb {
+            background: transparent;
+            margin: 0;
+            padding: 0;
+        }
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .text-purple {
+            color: #7c3aed !important;
+        }
+        .bg-purple {
+            background: #7c3aed !important;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Juegos - Grand Line</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Enhanced Search Section -->
+    <section class="py-5" style="margin-top: 80px; background: transparent;">
+        <div class="container">
+            <form action="/games/search" method="get">
+                <!-- Title and Counter -->
+                <div class="text-center mb-4">
+                    <img src="/images/logo.png" alt="Grand Line Logo" class="mb-3" style="height: 70px; width: auto;">
+                    <h2 class="text-white fw-bold mb-2" style="font-size: 1.75rem; letter-spacing: 0.5px;">
+                        Catálogo de Juegos
+                    </h2>
+                    <p class="text-white-50 mb-0">
+                        <span th:text="${totalGames != null ? totalGames : (totalResults != null ? totalResults : games.size())}">0</span> juegos disponibles
+                    </p>
+                </div>
+
+                <!-- Main Search Container -->
+                <div class="p-4 rounded-4 shadow-lg" style="background: transparent; backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); max-width: 1100px; margin: 0 auto;">
+                    
+                    <!-- Primary Search Row -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-12 col-lg-5">
+                            <div class="position-relative">
+                                <i class="fas fa-search position-absolute top-50 translate-middle-y ms-3 text-white-50" style="z-index: 10;"></i>
+                                <input type="text" 
+                                       name="query" 
+                                       class="form-control border-0 ps-5 py-3 rounded-3" 
+                                       placeholder="Buscar por título..."
+                                       th:value="${query}"
+                                       style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px); transition: all 0.3s ease;"
+                                       onfocus="this.style.background='rgba(255, 255, 255, 0.18)'; this.style.boxShadow='0 0 0 3px rgba(79, 70, 229, 0.3)'"
+                                       onblur="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.boxShadow='none'">
+                            </div>
+                        </div>
+                        
+                        <div class="col-6 col-lg-2">
+                            <select name="genre" class="form-select border-0 py-3 rounded-3" style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                                <option value="all" style="background: #1e293b;">Género</option>
+                                <option value="RPG" th:selected="${selectedGenre == 'RPG'}" style="background: #1e293b;">🎮 RPG</option>
+                                <option value="Action" th:selected="${selectedGenre == 'Action'}" style="background: #1e293b;">⚔️ Acción</option>
+                                <option value="Aventura" th:selected="${selectedGenre == 'Aventura'}" style="background: #1e293b;">🗺️ Aventura</option>
+                                <option value="Survival Horror" th:selected="${selectedGenre == 'Survival Horror'}" style="background: #1e293b;">👻 Horror</option>
+                                <option value="Lucha" th:selected="${selectedGenre == 'Lucha'}" style="background: #1e293b;">🥊 Lucha</option>
+                                <option value="Racing" th:selected="${selectedGenre == 'Racing'}" style="background: #1e293b;">🏎️ Carreras</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-6 col-lg-2">
+                            <select name="platform" class="form-select border-0 py-3 rounded-3" style="background: rgba(255, 255, 255, 0.12); color: white; backdrop-filter: blur(10px);">
+                                <option value="all" style="background: #1e293b;">Plataforma</option>
+                                <option value="PC" th:selected="${selectedPlatform == 'PC'}" style="background: #1e293b;">💻 PC</option>
+                                <option value="PS5" th:selected="${selectedPlatform == 'PS5'}" style="background: #1e293b;">🎮 PS5</option>
+                                <option value="Xbox" th:selected="${selectedPlatform == 'Xbox'}" style="background: #1e293b;">🎮 Xbox</option>
+                                <option value="Switch" th:selected="${selectedPlatform == 'Switch'}" style="background: #1e293b;">🕹️ Switch</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12 col-lg-3">
+                            <div class="d-flex gap-2 h-100">
+                                <button type="submit" class="btn flex-fill py-3 rounded-3 border-0 fw-semibold" style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); color: white; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);"
+                                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(79, 70, 229, 0.4)'"
+                                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.3)'">
+                                    <i class="fas fa-search me-2"></i>Buscar
+                                </button>
+                                <a href="/games" class="btn btn-outline-light py-3 px-4 rounded-3 border-0 d-flex align-items-center justify-content-center" 
+                                   style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); transition: all 0.3s ease;"
+                                   title="Limpiar filtros"
+                                   onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='rotate(90deg)'"
+                                   onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='rotate(0)'">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Filters -->
+                    <div class="pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.1) !important;">
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            <span class="text-white-50 small fw-semibold me-2">
+                                <i class="fas fa-bolt me-1"></i>Accesos rápidos:
+                            </span>
+                            <a href="/games" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(107, 114, 128, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-list me-1"></i>Todos
+                            </a>
+                            <a href="/games/search?genre=Action" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-fire me-1"></i>Acción
+                            </a>
+                            <a href="/games/search?genre=RPG" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(139, 92, 246, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-dragon me-1"></i>RPG
+                            </a>
+                            <a href="/games/search?genre=Aventura" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-compass me-1"></i>Aventura
+                            </a>
+                            <a href="/games/search?platform=PC" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(6, 182, 212, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-desktop me-1"></i>PC
+                            </a>
+                            <a href="/games/new" class="badge rounded-pill px-3 py-2 text-decoration-none" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); transition: all 0.3s ease;"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(245, 158, 11, 0.4)'"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <i class="fas fa-plus-circle me-1"></i>Nuevo Juego
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Messages -->
+    <div class="container mt-4" th:if="${successMessage}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    
+    <div class="container mt-4" th:if="${errorMessage}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+
+    <!-- Games List -->
+    <section class="py-5">
+        <div class="container">
+            <!-- No results message -->
+            <div th:if="${games.isEmpty()}" class="text-center py-5">
+                <i class="fas fa-inbox fa-4x text-white-50 mb-3"></i>
+                <h3 class="text-white mb-3">No se encontraron juegos</h3>
+                <p class="text-white-50">Intenta con otros términos de búsqueda</p>
+                <a href="/games" class="btn-gamer-primary mt-3">Ver todos los juegos</a>
+            </div>
+
+            <!-- Games Grid -->
+            <div class="row g-4" th:unless="${games.isEmpty()}">
+                <div class="col-6 col-md-4 col-lg-3 col-xl-3" th:each="game : ${games}">
+                    <div class="gamer-card fade-in h-100 d-flex flex-column">
+                        <!-- Game Badge -->
+                        <div class="position-relative">
+                            <span class="position-absolute top-0 start-0 m-2 badge" 
+                                  th:if="${game.badge != null}"
+                                  th:style="'background-color: ' + ${game.badgeColor}"
+                                  th:text="${game.badge}">
+                                Badge
+                            </span>
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-warning" 
+                                  th:if="${game.isFeatured}">
+                                <i class="fas fa-star"></i> Destacado
+                            </span>
+                        </div>
+
+                        <!-- Game Image -->
+                        <div class="gamer-card-header">
+                            <div class="game-thumbnail">
+                                <img th:if="${game.thumbnailUrl != null}" 
+                                     th:src="${game.thumbnailUrl}" 
+                                     alt="Game thumbnail" 
+                                     class="img-fluid">
+                                <i th:unless="${game.thumbnailUrl != null}" 
+                                   class="fas fa-gamepad fa-3x text-white-50"></i>
+                            </div>
+                        </div>
+
+                        <!-- Game Info -->
+                        <div class="gamer-card-body flex-fill d-flex flex-column">
+                            <h5 class="mb-2 text-white" th:text="${game.title}">Game Title</h5>
+                            
+                            <!-- Meta Info -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary" th:if="${game.genre != null}">
+                                    <i class="fas fa-tag me-1"></i>
+                                    <span th:text="${game.genre}">Genre</span>
+                                </span>
+                                <span class="text-warning" th:if="${game.rating != null}">
+                                    <i class="fas fa-star"></i>
+                                    <span th:text="${game.rating}">0</span>/10
+                                </span>
+                            </div>
+
+                            <p class="text-white-50 small mb-3" 
+                               th:text="${#strings.abbreviate(game.shortDescription != null ? game.shortDescription : game.description, 80)}">
+                                Description
+                            </p>
+
+                            <!-- Stats -->
+                            <div class="d-flex justify-content-between text-white-50 small mb-3">
+                                <span>
+                                    <i class="fas fa-eye me-1"></i>
+                                    <span th:text="${game.viewCount}">0</span> vistas
+                                </span>
+                                <span>
+                                    <i class="fas fa-download me-1"></i>
+                                    <span th:text="${game.downloadCount}">0</span> descargas
+                                </span>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="d-flex gap-2 mt-auto">
+                                <a th:href="@{/games/{id}(id=${game.id})}" 
+                                   class="btn-gamer-sm btn-gamer-primary flex-fill">
+                                    <i class="fas fa-eye me-1"></i>Ver
+                                </a>
+                                <a th:href="@{/games/{id}/edit(id=${game.id})}" 
+                                   class="btn-gamer-sm btn-gamer-outline">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" 
+                                        class="btn-gamer-sm btn-danger"
+                                        data-bs-toggle="modal" 
+                                        th:data-bs-target="'#deleteModal' + ${game.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" th:id="'deleteModal' + ${game.id}" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content glass-card">
+                                <div class="modal-header border-0">
+                                    <h5 class="modal-title text-white">
+                                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                        Confirmar Eliminación
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body text-white">
+                                    ¿Estás seguro de eliminar el juego <strong th:text="${game.title}">Game</strong>?
+                                    Esta acción no se puede deshacer.
+                                </div>
+                                <div class="modal-footer border-0">
+                                    <button type="button" class="btn-gamer-outline" data-bs-dismiss="modal">Cancelar</button>
+                                    <form th:action="@{/games/{id}/delete(id=${game.id})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -21,17 +21,66 @@
                             <i class="fas fa-home me-1"></i>Inicio
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/gamer">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="gamerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-gamepad me-1"></i>Gamer
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="gamerDropdown">
+                            <li><a class="dropdown-item" href="/gamer"><i class="fas fa-home me-2"></i>Inicio Gamer</a></li>
+                            <li><a class="dropdown-item" href="/games"><i class="fas fa-list me-2"></i>Catálogo</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/games/new"><i class="fas fa-plus-circle me-2"></i>Nuevo Juego</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/anime">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="animeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-dragon me-1"></i>Anime
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="animeDropdown">
+                            <li><a class="dropdown-item" href="/anime-home"><i class="fas fa-home me-2"></i>Inicio Anime</a></li>
+                            <li><a class="dropdown-item" href="/anime"><i class="fas fa-list me-2"></i>Catálogo</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/anime?status=AIRING"><i class="fas fa-signal me-2"></i>En Emisión</a></li>
+                            <li><a class="dropdown-item" href="/anime?type=MOVIE"><i class="fas fa-film me-2"></i>Películas</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item ms-lg-3">
+                    
+                    <!-- User Menu - Shown when logged in -->
+                    <li class="nav-item dropdown ms-lg-3" th:if="${session.loggedUser != null}">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:if="${session.loggedUser.avatarUrl != null}" 
+                                 th:src="${session.loggedUser.avatarUrl}" 
+                                 alt="Avatar" 
+                                 class="rounded-circle me-2" 
+                                 style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #fff;">
+                            <i th:unless="${session.loggedUser.avatarUrl != null}" 
+                               class="fas fa-user-circle me-2" 
+                               style="font-size: 1.5rem;"></i>
+                            <span th:text="${session.loggedUser.username}">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <div class="dropdown-item-text">
+                                    <div class="fw-bold" th:text="${session.loggedUser.name}">Nombre</div>
+                                    <small class="text-muted" th:text="${session.loggedUser.email}">email@example.com</small>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/profile">
+                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-cog me-2"></i>Configuración
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Login Button - Shown when NOT logged in -->
+                    <li class="nav-item ms-lg-3" th:if="${session.loggedUser == null}">
                         <a class="btn btn-light btn-sm" href="/login">
                             <i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión
                         </a>

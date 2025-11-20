@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,9 +23,19 @@
                         <p class="login-subtitle">Inicia tu aventura</p>
                     </div>
                     
+                    <!-- Success/Error Messages -->
+                    <div th:if="${successMessage}" class="alert alert-success mx-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${successMessage}"></span>
+                    </div>
+                    
+                    <div th:if="${errorMessage}" class="alert alert-danger mx-4" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span th:text="${errorMessage}"></span>
+                    </div>
+                    
                     <div class="card-body p-4 px-lg-5">
-                        <form id="userForm">
-                            <input type="hidden" id="userId">
+                        <form action="/login" method="post">
                             
                             <!-- Email Input -->
                             <div class="mb-4">
@@ -38,7 +48,8 @@
                                     </span>
                                     <input type="email" 
                                            class="form-control-modern" 
-                                           id="email" 
+                                           id="email"
+                                           name="email"
                                            placeholder="ejemplo@correo.com"
                                            required>
                                 </div>
@@ -55,7 +66,8 @@
                                     </span>
                                     <input type="password" 
                                            class="form-control-modern" 
-                                           id="password" 
+                                           id="password"
+                                           name="password"
                                            placeholder="••••••••"
                                            required>
                                     <button type="button" class="toggle-password" onclick="togglePassword()">
@@ -67,7 +79,7 @@
                             <!-- Remember & Forgot -->
                             <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
                                 <div class="form-check-modern">
-                                    <input class="form-check-input-modern" type="checkbox" id="rememberMe">
+                                    <input class="form-check-input-modern" type="checkbox" id="rememberMe" name="rememberMe">
                                     <label class="form-check-label-modern" for="rememberMe">
                                         Recordarme
                                     </label>
@@ -87,25 +99,24 @@
 
                             <!-- Divider -->
                             <div class="divider-modern">
-                                <span>O continúa con</span>
-                            </div>
-
-                            <!-- Social Login -->
-                            <div class="d-grid gap-2 mb-4">
-                                <button type="button" class="btn-modern btn-modern-social">
-                                    <i class="fab fa-google me-2"></i>
-                                    Google
-                                </button>
+                                <span>O</span>
                             </div>
 
                             <!-- Register Link -->
                             <div class="text-center mt-4">
                                 <p class="text-white-50 mb-0">
                                     ¿No tienes una cuenta? 
-                                    <a href="#" class="link-modern fw-bold">
+                                    <a href="/register" class="link-modern fw-bold">
                                         Regístrate aquí
                                     </a>
                                 </p>
+                            </div>
+
+                            <!-- Back to Home -->
+                            <div class="text-center mt-3">
+                                <a href="/" class="link-modern">
+                                    <i class="fas fa-home me-1"></i>Volver al inicio
+                                </a>
                             </div>
                         </form>
                     </div>
@@ -130,43 +141,6 @@
                 toggleIcon.classList.remove('fa-eye-slash');
                 toggleIcon.classList.add('fa-eye');
             }
-        }
-
-        // Form Submit
-        document.getElementById('userForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const saveBtn = document.getElementById('saveBtn');
-            
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i><span>Iniciando sesión...</span>';
-
-            // Simulación de login
-            setTimeout(() => {
-                showNotification('¡Bienvenido a Grand Line!', 'success');
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i><span>Iniciar Sesión</span>';
-                
-                // Redirigir al home
-                window.location.href = '/';
-            }, 1500);
-        });
-
-        function showNotification(message, type) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
-            alertDiv.style.zIndex = '9999';
-            alertDiv.style.minWidth = '300px';
-            alertDiv.innerHTML = `
-                <i class="fas fa-check-circle me-2"></i>${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            document.body.appendChild(alertDiv);
-            
-            setTimeout(() => {
-                alertDiv.remove();
-            }, 3000);
         }
 
         // Input Focus Animation
