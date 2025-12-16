@@ -3,6 +3,7 @@ package com.example.prueba_sprint.service;
 import com.example.prueba_sprint.entity.User;
 import com.example.prueba_sprint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -33,7 +37,7 @@ public class UserService {
     }
 
     /**
-     * Registrar nuevo usuario (sin encriptación por ahora)
+     * Registrar nuevo usuario con contraseña encriptada
      */
     public User registerUser(User user) {
         // Validar que el email no exista
@@ -42,7 +46,8 @@ public class UserService {
         }
         
         // Validar que el username no exista
-        if (user.getUsername() != null && userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if (user.getUsername() != null && !user.getUsername().trim().isEmpty() 
+            && userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalArgumentException("El username ya está en uso");
         }
         
@@ -51,20 +56,29 @@ public class UserService {
             user.setUsername(user.getEmail().split("@")[0]);
         }
         
-        // Por ahora sin encriptación - TODO: Agregar BCryptPasswordEncoder
+        // Encriptar contraseña con BCrypt
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
+        // Asegurar que tenga rol por defecto
+        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+            user.setRole("USER");
+        }
+        
         return userRepository.save(user);
     }
 
     /**
-     * Autenticar usuario
+     * Autenticar usuario (ya no se usa - Spring Security maneja la autenticación)
+     * @deprecated Usar Spring Security Authentication en su lugar
      */
+    @Deprecated
     public Optional<User> authenticateUser(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
         
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            // Por ahora comparación directa - TODO: Agregar BCryptPasswordEncoder
-            if (user.getPassword().equals(password)) {
+            // Verificar contraseña encriptada
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 return Optional.of(user);
             }
         }
@@ -92,7 +106,8 @@ public class UserService {
                 existingUser.setEmail(user.getEmail());
             }
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-                existingUser.setPassword(user.getPassword());
+                // Encriptar nueva contraseña
+                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             }
             if (user.getAvatarUrl() != null) {
                 existingUser.setAvatarUrl(user.getAvatarUrl());

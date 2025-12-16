@@ -1,18 +1,21 @@
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('eduardo', 'Eduardo García', 'eduardo@example.com', 'password123', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('maria', 'María López', 'maria@example.com', 'password456', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('carlos', 'Carlos Ruiz', 'carlos@example.com', 'password789', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('ana', 'Ana Martínez', 'ana@example.com', 'password101', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('luis', 'Luis Fernández', 'luis@example.com', 'password202', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('sofia', 'Sofia Ramírez', 'sofia@example.com', 'password303', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('diego', 'Diego Torres', 'diego@example.com', 'password404', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('valentina', 'Valentina Morales', 'valentina@example.com', 'password505', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('javier', 'Javier Herrera', 'javier@example.com', 'password606', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('isabella', 'Isabella Castro', 'isabella@example.com', 'password707', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('andres', 'Andrés Vargas', 'andres@example.com', 'password808', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('scamila', 'Camila Mendoza', 'camila@example.com', 'password909', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('miguel', 'Miguel Ángel Pérez', 'miguel@example.com', 'password111', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('lucia', 'Lucía Romero', 'lucia@example.com', 'password222', 'USER', CURRENT_TIMESTAMP);
-INSERT INTO users (username, name, email, password, role, created_at) VALUES ('gabriel', 'Gabriel Silva', 'gabriel@example.com', 'password333', 'ADMIN', CURRENT_TIMESTAMP);
+-- NOTA: Los usuarios deben registrarse mediante el formulario /register para que las contraseñas se encripten con BCrypt
+-- Las contraseñas en texto plano ya no funcionan con Spring Security
+
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('eduardo', 'Eduardo García', 'eduardo@example.com', 'password123', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('maria', 'María López', 'maria@example.com', 'password456', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('carlos', 'Carlos Ruiz', 'carlos@example.com', 'password789', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('ana', 'Ana Martínez', 'ana@example.com', 'password101', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('luis', 'Luis Fernández', 'luis@example.com', 'password202', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('sofia', 'Sofia Ramírez', 'sofia@example.com', 'password303', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('diego', 'Diego Torres', 'diego@example.com', 'password404', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('valentina', 'Valentina Morales', 'valentina@example.com', 'password505', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('javier', 'Javier Herrera', 'javier@example.com', 'password606', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('isabella', 'Isabella Castro', 'isabella@example.com', 'password707', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('andres', 'Andrés Vargas', 'andres@example.com', 'password808', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('scamila', 'Camila Mendoza', 'camila@example.com', 'password909', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('miguel', 'Miguel Ángel Pérez', 'miguel@example.com', 'password111', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('lucia', 'Lucía Romero', 'lucia@example.com', 'password222', 'USER', CURRENT_TIMESTAMP);
+-- INSERT INTO users (username, name, email, password, role, created_at) VALUES ('gabriel', 'Gabriel Silva', 'gabriel@example.com', 'password333', 'ADMIN', CURRENT_TIMESTAMP);
 
 INSERT INTO games (title, description, short_description, developer, publisher, release_date, rating, genre, platforms, badge, badge_color, is_featured, view_count, download_count) VALUES ('Cyberpunk 2077: Phantom Liberty', 'Una expansión épica que lleva la historia de Cyberpunk a nuevas alturas con mecánicas mejoradas y gráficos de última generación. Explora una nueva zona con personajes fascinantes y misiones emocionantes.', 'Expansión épica con gráficos de última generación', 'CD Projekt Red', 'CD Projekt', '2025-11-15', 9.5, 'RPG', 'PC, PS5, Xbox Series X', 'Noviembre 2025', '#ef4444', true, 1250, 850);
 INSERT INTO games (title, description, short_description, developer, publisher, release_date, rating, genre, platforms, badge, badge_color, is_featured, view_count, download_count) VALUES ('Starfield: Extended Universe', 'Explora el universo infinito con nuevas mecánicas de exploración espacial y misiones proceduralmente generadas. Un viaje épico por las estrellas te espera.', 'Explora el universo infinito', 'Bethesda Game Studios', 'Bethesda Softworks', '2025-11-01', 9.2, 'RPG/Aventura', 'PC, Xbox Series X', '¡Recién salido!', '#10b981', true, 2100, 1500);
