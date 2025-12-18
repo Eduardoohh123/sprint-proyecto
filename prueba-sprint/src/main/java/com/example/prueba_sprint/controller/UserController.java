@@ -2,8 +2,11 @@ package com.example.prueba_sprint.controller;
 
 import com.example.prueba_sprint.entity.User;
 import com.example.prueba_sprint.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import com.example.prueba_sprint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,43 +20,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Mostrar página de login
-     */
-    @GetMapping("/login")
-    public String showLoginPage(HttpSession session, Model model) {
-        // Si ya hay sesión activa, redirigir al inicio
-        if (session.getAttribute("loggedUser") != null) {
-            return "redirect:/";
-        }
-        model.addAttribute("user", new User());
-        return "login/login";
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     /**
-     * Procesar login
+     * Mostrar página de login - Spring Security maneja el login automáticamente
      */
-    @PostMapping("/login")
-    public String login(@RequestParam String email, 
-                       @RequestParam String password,
-                       HttpSession session,
-                       RedirectAttributes redirectAttributes) {
-        
-        Optional<User> userOpt = userService.authenticateUser(email, password);
-        
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            // Guardar usuario en sesión
-            session.setAttribute("loggedUser", user);
-            session.setAttribute("userId", user.getId());
-            session.setAttribute("username", user.getUsername());
-            
-            redirectAttributes.addFlashAttribute("successMessage", "¡Bienvenido " + user.getName() + "!");
-            return "redirect:/";
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Email o contraseña incorrectos");
-            return "redirect:/login";
+    @GetMapping("/login")
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "logout", required = false) String logout,
+                                Model model) {
+        if (error != null) {
+            model.addAttribute("errorMessage", "Email o contraseña incorrectos");
         }
+        if (logout != null) {
+            model.addAttribute("successMessage", "Sesión cerrada correctamente");
+        }
+        return "login/login";
     }
 
     /**
@@ -82,18 +65,18 @@ public class UserController {
     }
 
     /**
-     * Mostrar perfil de usuario
+     * Mostrar perfil de usuario - Usa Spring Security Authentication
      */
     @GetMapping("/profile")
-    public String showProfile(HttpSession session, Model model) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        
-        if (loggedUser == null) {
+    public String showProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
             return "redirect:/login";
         }
         
-        // Recargar datos actualizados del usuario
-        Optional<User> userOpt = userService.getUserById(loggedUser.getId());
+        // Obtener usuario por email (username en Spring Security)
+        String email = userDetails.getUsername();
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        
         if (userOpt.isPresent()) {
             model.addAttribute("user", userOpt.get());
             return "login/profile";
@@ -103,44 +86,35 @@ public class UserController {
     }
 
     /**
-     * Actualizar perfil de usuario
+     * Actualizar perfil de usuario - Usa Spring Security Authentication
      */
     @PostMapping("/profile/update")
     public String updateProfile(@ModelAttribute User user,
-                               HttpSession session,
+                               @AuthenticationPrincipal UserDetails userDetails,
                                RedirectAttributes redirectAttributes) {
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        
-        if (loggedUser == null) {
+        if (userDetails == null) {
             return "redirect:/login";
         }
         
         try {
-            // Actualizar solo los campos permitidos
-            user.setId(loggedUser.getId());
-            Optional<User> updatedUser = userService.updateUser(loggedUser.getId(), user);
+            // Obtener usuario actual
+            String email = userDetails.getUsername();
+            Optional<User> currentUserOpt = userRepository.findByEmail(email);
             
-            if (updatedUser.isPresent()) {
-                // Actualizar sesión con datos nuevos
-                session.setAttribute("loggedUser", updatedUser.get());
-                session.setAttribute("username", updatedUser.get().getUsername());
+            if (currentUserOpt.isPresent()) {
+                User currentUser = currentUserOpt.get();
+                user.setId(currentUser.getId());
                 
-                redirectAttributes.addFlashAttribute("successMessage", "Perfil actualizado correctamente");
+                Optional<User> updatedUser = userService.updateUser(currentUser.getId(), user);
+                
+                if (updatedUser.isPresent()) {
+                    redirectAttributes.addFlashAttribute("successMessage", "Perfil actualizado correctamente");
+                }
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al actualizar perfil: " + e.getMessage());
         }
         
         return "redirect:/profile";
-    }
-
-    /**
-     * Cerrar sesión
-     */
-    @GetMapping("/logout")
-    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
-        session.invalidate();
-        redirectAttributes.addFlashAttribute("successMessage", "Sesión cerrada correctamente");
-        return "redirect:/";
     }
 }

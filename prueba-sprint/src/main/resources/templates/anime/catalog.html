@@ -270,6 +270,43 @@
                                 <button class="btn-gamer-sm btn-gamer-outline">
                                     <i class="fas fa-heart"></i>
                                 </button>
+                                <button type="button" 
+                                        class="btn-gamer-sm btn-danger"
+                                        data-bs-toggle="modal" 
+                                        th:data-bs-target="'#deleteAnimeModal' + ${anime.id}"
+                                        title="Eliminar anime">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" th:id="'deleteAnimeModal' + ${anime.id}" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content glass-card">
+                                <div class="modal-header border-0">
+                                    <h5 class="modal-title text-white">
+                                        <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                        Confirmar Eliminación
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body text-white">
+                                    <p>¿Estás seguro que deseas eliminar el anime <strong th:text="${anime.titleRomaji}">Anime</strong>?</p>
+                                    <p class="text-white-50 small mb-0">Esta acción no se puede deshacer.</p>
+                                </div>
+                                <div class="modal-footer border-0">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-1"></i>Cancelar
+                                    </button>
+                                    <form th:action="@{/anime/{id}/delete(id=${anime.id})}" method="post" class="d-inline">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-trash me-1"></i>Eliminar
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

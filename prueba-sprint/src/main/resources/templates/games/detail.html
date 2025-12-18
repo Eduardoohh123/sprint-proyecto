@@ -199,10 +199,13 @@
                     Esta acción no se puede deshacer.
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn-gamer-outline" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn-gamer-outline" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </button>
                     <form th:action="@{/games/{id}/delete(id=${game.id})}" method="post" class="d-inline">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash me-2"></i>Eliminar
+                            <i class="fas fa-trash me-1"></i>Eliminar
                         </button>
                     </form>
                 </div>
