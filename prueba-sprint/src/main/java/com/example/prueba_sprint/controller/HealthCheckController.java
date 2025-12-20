@@ -58,4 +58,40 @@ public class HealthCheckController {
     public ResponseEntity<String> ping() {
         return ResponseEntity.ok("pong");
     }
+
+    /**
+     * Endpoint para listar interfaces de red y direcciones IPv4/IPv6
+     */
+    @GetMapping("/network")
+    public ResponseEntity<Map<String, Object>> getNetworkInfo() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Map<String, Object> interfaces = new HashMap<>();
+            java.util.Enumeration<java.net.NetworkInterface> nets = java.net.NetworkInterface.getNetworkInterfaces();
+            while (nets.hasMoreElements()) {
+                java.net.NetworkInterface netint = nets.nextElement();
+                java.util.List<Map<String, Object>> addrs = new java.util.ArrayList<>();
+                java.util.Enumeration<java.net.InetAddress> inetAddresses = netint.getInetAddresses();
+                while (inetAddresses.hasMoreElements()) {
+                    java.net.InetAddress addr = inetAddresses.nextElement();
+                    Map<String, Object> info = new HashMap<>();
+                    info.put("address", addr.getHostAddress());
+                    info.put("isLoopback", addr.isLoopbackAddress());
+                    info.put("isLinkLocal", addr.isLinkLocalAddress());
+                    info.put("isSiteLocal", addr.isSiteLocalAddress());
+                    info.put("isIPv4", addr instanceof java.net.Inet4Address);
+                    info.put("isIPv6", addr instanceof java.net.Inet6Address);
+                    addrs.add(info);
+                }
+                interfaces.put(netint.getName(), addrs);
+            }
+            response.put("interfaces", interfaces);
+            response.put("timestamp", System.currentTimeMillis());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 }

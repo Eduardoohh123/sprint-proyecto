@@ -29,7 +29,7 @@ public class ApiUserController {
 
     // Map entity -> DTO
     private UserDTO toDto(User u) {
-        return new UserDTO(u.getId(), u.getName(), u.getUsername(), u.getEmail(), u.getAvatarUrl());
+        return new UserDTO(u.getId(), u.getName(), u.getUsername(), u.getEmail(), u.getAvatarUrl(), u.getSupabaseId());
     }
 
     @PostMapping("/register")

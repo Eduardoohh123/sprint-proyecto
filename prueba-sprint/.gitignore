@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore temporary and log files created during tests
+*.out
+*.err
+*.log
+tmp_*.txt
+tmp_*.json
+mvnw.out
+mvnw.err

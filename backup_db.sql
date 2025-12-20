@@ -2,8 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict ZM7MNcO4Bpmv0N0tMcI6TO9jGeBHk7udhDXMGWjfsc8mKqxoD8BaBatScI90ACs
-
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
 
@@ -675,6 +673,4 @@ ALTER TABLE ONLY public.user_anime_lists
 --
 -- PostgreSQL database dump complete
 --
-
-\unrestrict ZM7MNcO4Bpmv0N0tMcI6TO9jGeBHk7udhDXMGWjfsc8mKqxoD8BaBatScI90ACs
 
