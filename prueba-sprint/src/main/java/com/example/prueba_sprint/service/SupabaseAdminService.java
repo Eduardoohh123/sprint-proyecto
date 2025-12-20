@@ -1,6 +1,8 @@
 package com.example.prueba_sprint.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +14,7 @@ import java.util.Map;
 @Service
 public class SupabaseAdminService {
 
+    private static final Logger log = LoggerFactory.getLogger(SupabaseAdminService.class);
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${supabase.host:${SUPABASE_HOST:}}")
@@ -52,14 +55,21 @@ public class SupabaseAdminService {
 
         try {
             ResponseEntity<Map> resp = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+            // Log status y cuerpo para debugging temporal
+            log.info("Supabase Admin API response status={}, body={}", resp.getStatusCodeValue(), resp.getBody());
             if (resp.getStatusCode().is2xxSuccessful() && resp.getBody() != null) {
                 Object id = resp.getBody().get("id");
                 return id != null ? id.toString() : null;
             }
             return null;
         } catch (HttpClientErrorException e) {
-            throw new RuntimeException("Error creando usuario en Supabase: " + e.getResponseBodyAsString(), e);
+            // Loguear status y body devuelto por Supabase
+            String body = e.getResponseBodyAsString();
+            int status = e.getStatusCode() != null ? e.getStatusCode().value() : -1;
+            log.error("Supabase Admin API error status={}, body={}", status, body);
+            throw new RuntimeException("Error creando usuario en Supabase: " + body, e);
         } catch (Exception ex) {
+            log.error("Error al conectar con Supabase Admin API: {}", ex.getMessage(), ex);
             throw new RuntimeException("Error al conectar con Supabase Admin API: " + ex.getMessage(), ex);
         }
     }
