@@ -10,6 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class SupabaseAdminService {
@@ -33,7 +34,7 @@ public class SupabaseAdminService {
         return "https://" + supabaseHost;
     }
 
-    @javax.annotation.PostConstruct
+    @PostConstruct
     private void postConstruct() {
         // No imprimir secrets; sólo indicar si están presentes para debugging en staging
         log.info("Supabase config: host defined={}, serviceRoleKey defined={}",
