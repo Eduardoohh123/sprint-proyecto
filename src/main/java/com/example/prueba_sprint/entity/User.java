@@ -24,6 +24,10 @@ public class User {
     
     private String avatarUrl;
     
+    // ID del usuario en Supabase Auth (opcional)
+    @Column(unique = true)
+    private String supabaseId;
+
     private String role = "USER"; // USER, ADMIN
     
     private LocalDateTime createdAt;
@@ -92,6 +96,14 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getSupabaseId() {
+        return supabaseId;
+    }
+
+    public void setSupabaseId(String supabaseId) {
+        this.supabaseId = supabaseId;
     }
 
     public String getRole() {

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class UserService {
@@ -17,6 +19,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SupabaseAdminService supabaseAdminService;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -55,8 +60,16 @@ public class UserService {
         if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
             user.setUsername(user.getEmail().split("@")[0]);
         }
+
+        // Crear usuario en Supabase Auth primero (Admin API)
+        try {
+            String supabaseUid = supabaseAdminService.createUser(user.getEmail(), user.getPassword());
+            user.setSupabaseId(supabaseUid);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("No se pudo crear usuario en Supabase: " + e.getMessage());
+        }
         
-        // Encriptar contraseña con BCrypt
+        // Encriptar contraseña con BCrypt (aún guardamos hash local)
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         
         // Asegurar que tenga rol por defecto
@@ -141,7 +154,19 @@ public class UserService {
         if (id == null) {
             return false;
         }
-        if (userRepository.existsById(id)) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            // Primero intentar eliminar en Supabase si existe supabaseId
+            try {
+                if (user.getSupabaseId() != null) {
+                    supabaseAdminService.deleteUser(user.getSupabaseId());
+                }
+            } catch (Exception e) {
+                // Loguear y continuar con eliminación local para evitar inconsistencias completas
+                System.err.println("Advertencia: no se pudo eliminar usuario en Supabase: " + e.getMessage());
+            }
+
             userRepository.deleteById(id);
             return true;
         }

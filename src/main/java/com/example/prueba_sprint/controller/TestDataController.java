@@ -128,7 +128,8 @@ public class TestDataController {
             user.setUsername(username);
             user.setName(name);
             user.setEmail(email);
-            user.setPassword(password); // En producción, usar BCrypt
+            // Hashear la contraseña antes de guardar
+            user.setPassword(passwordEncoder.encode(password));
             user.setRole("USER");
             
             User savedUser = userRepository.save(user);
@@ -169,12 +170,19 @@ public class TestDataController {
 
             User user = userOptional.get();
 
-            // Verificar contraseña con BCrypt
+            // Verificar contraseña con BCrypt (o migrar si estaba en texto plano)
             if (!passwordEncoder.matches(password, user.getPassword())) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "Contraseña incorrecta");
-                response.put("status", "error");
-                return ResponseEntity.status(401).body(response);
+                // Si la contraseña en la BD no parece hasheada y coincide exactamente, migrar a BCrypt
+                if (user.getPassword() != null && !user.getPassword().startsWith("$2") && password.equals(user.getPassword())) {
+                    String hashed = passwordEncoder.encode(password);
+                    user.setPassword(hashed);
+                    userRepository.save(user);
+                } else {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("message", "Contraseña incorrecta");
+                    response.put("status", "error");
+                    return ResponseEntity.status(401).body(response);
+                }
             }
 
             // Login exitoso
@@ -197,6 +205,40 @@ public class TestDataController {
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Error al iniciar sesión: " + e.getMessage());
+            response.put("status", "error");
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal para actualizar la contraseña de un usuario (hash con BCrypt).
+     * Úsalo solo en desarrollo: POST /api/test/users/set-password { "email": "..", "password": ".." }
+     */
+    @PostMapping("/users/set-password")
+    public ResponseEntity<Map<String, Object>> setPassword(@RequestBody Map<String, String> body) {
+        try {
+            String email = body.get("email");
+            String password = body.get("password");
+
+            var userOptional = userRepository.findByEmail(email);
+            if (!userOptional.isPresent()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "No existe una cuenta con este correo");
+                response.put("status", "error");
+                return ResponseEntity.status(404).body(response);
+            }
+
+            User user = userOptional.get();
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Contraseña actualizada y hasheada");
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error al actualizar contraseña: " + e.getMessage());
             response.put("status", "error");
             return ResponseEntity.status(500).body(response);
         }

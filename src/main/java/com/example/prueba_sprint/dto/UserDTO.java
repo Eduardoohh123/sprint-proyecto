@@ -6,15 +6,17 @@ public class UserDTO {
     private String username;
     private String email;
     private String avatarUrl;
+    private String supabaseId;
 
     public UserDTO() {}
 
-    public UserDTO(Long id, String name, String username, String email, String avatarUrl) {
+    public UserDTO(Long id, String name, String username, String email, String avatarUrl, String supabaseId) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.avatarUrl = avatarUrl;
+        this.supabaseId = supabaseId;
     }
 
     public Long getId() {
@@ -55,5 +57,13 @@ public class UserDTO {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getSupabaseId() {
+        return supabaseId;
+    }
+
+    public void setSupabaseId(String supabaseId) {
+        this.supabaseId = supabaseId;
     }
 }
