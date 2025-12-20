@@ -25,9 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**") // Deshabilitar CSRF para API REST
-            )
+            .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF completamente para API REST
             .authorizeHttpRequests(auth -> auth
                 // Rutas públicas de la API REST para Ionic
                 .requestMatchers("/api/**").permitAll()
