@@ -95,14 +95,30 @@ public class UserService {
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
             
+            // Validar username si se está cambiando
+            if (user.getUsername() != null && !user.getUsername().equals(existingUser.getUsername())) {
+                Optional<User> usernameCheck = userRepository.findByUsername(user.getUsername());
+                if (usernameCheck.isPresent() && !usernameCheck.get().getId().equals(id)) {
+                    throw new IllegalArgumentException("El username ya está en uso");
+                }
+            }
+            
+            // Validar email si se está cambiando
+            if (user.getEmail() != null && !user.getEmail().equals(existingUser.getEmail())) {
+                Optional<User> emailCheck = userRepository.findByEmail(user.getEmail());
+                if (emailCheck.isPresent() && !emailCheck.get().getId().equals(id)) {
+                    throw new IllegalArgumentException("El email ya está en uso");
+                }
+            }
+            
             // Actualizar solo los campos no nulos
-            if (user.getName() != null) {
+            if (user.getName() != null && !user.getName().trim().isEmpty()) {
                 existingUser.setName(user.getName());
             }
-            if (user.getUsername() != null) {
+            if (user.getUsername() != null && !user.getUsername().trim().isEmpty()) {
                 existingUser.setUsername(user.getUsername());
             }
-            if (user.getEmail() != null) {
+            if (user.getEmail() != null && !user.getEmail().trim().isEmpty()) {
                 existingUser.setEmail(user.getEmail());
             }
             if (user.getPassword() != null && !user.getPassword().isEmpty()) {
@@ -111,6 +127,9 @@ public class UserService {
             }
             if (user.getAvatarUrl() != null) {
                 existingUser.setAvatarUrl(user.getAvatarUrl());
+            }
+            if (user.getRole() != null && !user.getRole().trim().isEmpty()) {
+                existingUser.setRole(user.getRole());
             }
             
             return Optional.of(userRepository.save(existingUser));

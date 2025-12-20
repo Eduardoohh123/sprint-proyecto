@@ -4,13 +4,18 @@ import com.example.prueba_sprint.dto.AuthRequest;
 import com.example.prueba_sprint.dto.UserDTO;
 import com.example.prueba_sprint.entity.User;
 import com.example.prueba_sprint.service.UserService;
+import com.example.prueba_sprint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,6 +23,9 @@ public class ApiUserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Map entity -> DTO
     private UserDTO toDto(User u) {
@@ -57,11 +65,86 @@ public class ApiUserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
-        Optional<User> updated = userService.updateUser(id, user);
-        if (updated.isPresent()) {
-            return ResponseEntity.ok(toDto(updated.get()));
+        try {
+            Optional<User> updated = userService.updateUser(id, user);
+            if (updated.isPresent()) {
+                User updatedUser = updated.get();
+                updatedUser.setPassword(null); // No devolver contraseña
+                return ResponseEntity.ok(updatedUser);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al actualizar usuario: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found or not updated");
+    }
+
+    /**
+     * Obtener todos los usuarios (para panel de administración)
+     * GET /api/users
+     */
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        // Ocultar contraseñas
+        users.forEach(user -> user.setPassword(null));
+        return ResponseEntity.ok(users);
+    }
+
+    /**
+     * Eliminar un usuario
+     * DELETE /api/users/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            Optional<User> userOpt = userRepository.findById(id);
+            
+            if (!userOpt.isPresent()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Usuario no encontrado");
+                response.put("status", "error");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            
+            userRepository.deleteById(id);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Usuario eliminado exitosamente");
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error al eliminar usuario: " + e.getMessage());
+            response.put("status", "error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    /**
+     * Buscar usuarios por nombre o email
+     * GET /api/users/search?q=texto
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String q) {
+        List<User> users = userRepository.findAll();
+        String query = q.toLowerCase();
+        
+        List<User> filteredUsers = users.stream()
+            .filter(user -> 
+                user.getName().toLowerCase().contains(query) ||
+                user.getEmail().toLowerCase().contains(query) ||
+                user.getUsername().toLowerCase().contains(query)
+            )
+            .collect(Collectors.toList());
+        
+        // Ocultar contraseñas
+        filteredUsers.forEach(user -> user.setPassword(null));
+        
+        return ResponseEntity.ok(filteredUsers);
     }
 
 }
