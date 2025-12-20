@@ -33,6 +33,14 @@ public class SupabaseAdminService {
         return "https://" + supabaseHost;
     }
 
+    @javax.annotation.PostConstruct
+    private void postConstruct() {
+        // No imprimir secrets; sólo indicar si están presentes para debugging en staging
+        log.info("Supabase config: host defined={}, serviceRoleKey defined={}",
+                (supabaseHost != null && !supabaseHost.isBlank()),
+                (serviceRoleKey != null && !serviceRoleKey.isBlank()));
+    }
+
     /**
      * Crea un usuario en Supabase Auth (Admin API)
      * Retorna el id (uid) del usuario creado.
@@ -64,10 +72,10 @@ public class SupabaseAdminService {
             return null;
         } catch (HttpClientErrorException e) {
             // Loguear status y body devuelto por Supabase
-            String body = e.getResponseBodyAsString();
+            String respBody = e.getResponseBodyAsString();
             int status = e.getStatusCode() != null ? e.getStatusCode().value() : -1;
-            log.error("Supabase Admin API error status={}, body={}", status, body);
-            throw new RuntimeException("Error creando usuario en Supabase: " + body, e);
+            log.error("Supabase Admin API error status={}, body={}", status, respBody);
+            throw new RuntimeException("Error creando usuario en Supabase: " + respBody, e);
         } catch (Exception ex) {
             log.error("Error al conectar con Supabase Admin API: {}", ex.getMessage(), ex);
             throw new RuntimeException("Error al conectar con Supabase Admin API: " + ex.getMessage(), ex);
