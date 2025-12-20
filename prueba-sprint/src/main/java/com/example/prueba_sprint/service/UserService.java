@@ -64,10 +64,15 @@ public class UserService {
         // Crear usuario en Supabase Auth primero (Admin API)
         try {
             String supabaseUid = supabaseAdminService.createUser(user.getEmail(), user.getPassword());
+            if (supabaseUid == null || supabaseUid.isBlank()) {
+                // Si Supabase no devolvió un id, considerar esto un fallo
+                log.error("Supabase did not return a UID when creating user {}", user.getEmail());
+                throw new IllegalArgumentException("No se recibió id de Supabase al crear el usuario");
+            }
             user.setSupabaseId(supabaseUid);
         } catch (Exception e) {
             // Loguear detalle para que el deploy en Render lo muestre y sea más fácil el diagnóstico
-            System.err.println("Error registrando en Supabase: " + e.getMessage());
+            log.error("Error registrando en Supabase: {}", e.getMessage(), e);
             throw new IllegalArgumentException("No se pudo crear usuario en Supabase: " + e.getMessage());
         }
         

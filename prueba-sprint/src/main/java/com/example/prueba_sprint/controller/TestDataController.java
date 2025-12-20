@@ -34,6 +34,9 @@ public class TestDataController {
     @Autowired
     private com.example.prueba_sprint.service.UserService userService;
 
+    @Autowired
+    private com.example.prueba_sprint.service.SupabaseAdminService supabaseAdminService;
+
     private static final Logger log = LoggerFactory.getLogger(TestDataController.class);
 
     /**
@@ -48,6 +51,27 @@ public class TestDataController {
         stats.put("games", gameRepository.count());
         stats.put("timestamp", System.currentTimeMillis());
         return ResponseEntity.ok(stats);
+    }
+
+    /**
+     * Endpoint de diagnóstico/health para Supabase Admin API (temporal)
+     */
+    @GetMapping("/supabase")
+    public ResponseEntity<Map<String, Object>> supabaseStatus() {
+        try {
+            Map<String, Object> status = supabaseAdminService.healthCheck();
+            boolean ok = Boolean.TRUE.equals(status.get("ok"));
+            if (ok) {
+                return ResponseEntity.ok(status);
+            } else {
+                return ResponseEntity.status(502).body(status);
+            }
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
     }
 
     /**
@@ -146,6 +170,10 @@ public class TestDataController {
             Map<String, Object> response = new HashMap<>();
             response.put("message", e.getMessage());
             response.put("status", "error");
+            // Si el error viene del upstream Supabase, devolver 502 Bad Gateway
+            if (e.getMessage().toLowerCase().contains("supabase") || e.getMessage().toLowerCase().contains("service_role_key")) {
+                return ResponseEntity.status(502).body(response);
+            }
             return ResponseEntity.status(400).body(response);
         } catch (Exception e) {
             log.error("Error al registrar usuario: {}", e.getMessage(), e);

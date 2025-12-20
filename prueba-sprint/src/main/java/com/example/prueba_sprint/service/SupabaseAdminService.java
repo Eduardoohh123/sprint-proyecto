@@ -47,6 +47,10 @@ public class SupabaseAdminService {
      * Retorna el id (uid) del usuario creado.
      */
     public String createUser(String email, String password) {
+        if (serviceRoleKey == null || serviceRoleKey.isBlank()) {
+            throw new RuntimeException("SUPABASE_SERVICE_ROLE_KEY no está configurada en el entorno");
+        }
+
         String url = baseUrl() + "/auth/v1/admin/users";
 
         HttpHeaders headers = new HttpHeaders();
@@ -102,6 +106,50 @@ public class SupabaseAdminService {
             throw new RuntimeException("Error eliminando usuario en Supabase: " + e.getResponseBodyAsString(), e);
         } catch (Exception ex) {
             throw new RuntimeException("Error al conectar con Supabase Admin API: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Health check / diagnostic para Supabase Admin API.
+     * Retorna un mapa con campos: configured (boolean), ok (boolean), status (int), message/body (String)
+     */
+    public Map<String, Object> healthCheck() {
+        Map<String, Object> result = new HashMap<>();
+        boolean configured = (serviceRoleKey != null && !serviceRoleKey.isBlank()) && (supabaseHost != null && !supabaseHost.isBlank());
+        result.put("configured", configured);
+
+        if (!configured) {
+            result.put("ok", false);
+            result.put("message", "SUPABASE_SERVICE_ROLE_KEY o SUPABASE_HOST no están configurados");
+            return result;
+        }
+
+        String url = baseUrl() + "/auth/v1/admin/users?limit=1";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(serviceRoleKey);
+        headers.add("apikey", serviceRoleKey);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> resp = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            result.put("ok", resp.getStatusCode().is2xxSuccessful());
+            result.put("status", resp.getStatusCodeValue());
+            // No devolver cuerpos enormes en producción; aquí para debugging temporal
+            result.put("body", resp.getBody());
+            return result;
+        } catch (HttpClientErrorException he) {
+            int status = he.getStatusCode() != null ? he.getStatusCode().value() : -1;
+            String respBody = he.getResponseBodyAsString();
+            log.error("Supabase Admin API healthcheck failed status={}, body={}", status, respBody);
+            result.put("ok", false);
+            result.put("status", status);
+            result.put("message", respBody);
+            return result;
+        } catch (Exception ex) {
+            log.error("Error conectando al Admin API de Supabase: {}", ex.getMessage(), ex);
+            result.put("ok", false);
+            result.put("message", ex.getMessage());
+            return result;
         }
     }
 }
