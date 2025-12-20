@@ -1,0 +1,2372 @@
+/* Variables CSS - Colores y Sombras */
+:root {
+    --primary-color: #4f46e5;
+    --primary-dark: #4338ca;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --bg-light: #f9fafb;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+/* Glass Input Styles */
+.glass-input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px);
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+    color: white !important;
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.glass-input option {
+    background: #1e293b;
+    color: white;
+}
+
+/* Game Detail Image */
+.game-detail-image {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.game-detail-image img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.game-detail-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Info and Stat Items */
+.info-item, .stat-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item:last-child, .stat-item:last-child {
+    border-bottom: none;
+}
+
+/* Estilos Generales del Body */
+body {
+    /* Fondo global: imagen de One Piece en máxima calidad */
+    background-image: url('/images/site-bg.jpg');
+    background-repeat: repeat;
+    background-position: center top;
+    background-size: auto 100vh; /* Altura del viewport, manteniendo proporción */
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 0;
+    margin: 0;
+    /* Mejoras de calidad de imagen */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Contenedor Principal */
+.main-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Estilos de Tarjetas */
+.card {
+    border: none;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: 1.5rem 1.5rem 0 0 !important;
+    padding: 2rem;
+    border: none;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.75rem;
+}
+
+.card-body {
+    padding: 2.5rem !important;
+}
+
+/* Logo y Título */
+.logo-container {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.logo-container i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.logo-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.logo-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    margin: 0;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Links personalizados */
+.forgot-password {
+    color: var(--primary-color);
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: var(--primary-dark);
+    text-decoration: underline !important;
+}
+
+/* Checkbox personalizado */
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* Botones más grandes para login */
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .card-header {
+        padding: 1.5rem;
+    }
+    
+    .card-header h2 {
+        font-size: 1.35rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .main-container {
+        padding: 0.5rem;
+    }
+    
+    .logo-container {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .logo-container i {
+        font-size: 2rem;
+    }
+    
+    .logo-title {
+        font-size: 1.5rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilos de Formularios */
+.form-control, .form-select {
+    border-radius: 0.5rem;
+    border: 2px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+/* Estilos de Botones */
+.btn {
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Estilos de Tablas */
+.table-container {
+    overflow-x: auto;
+    border-radius: 0.75rem;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+.table thead th {
+    font-weight: 700;
+    color: #1f2937;
+    padding: 1rem;
+    border: none;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f9fafb;
+    transform: scale(1.01);
+}
+
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* Badges */
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+/* Estado Vacío */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+/* Botones de Acción */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+/* Tarjeta de Estadísticas */
+.stats-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.stats-card i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.stats-card p {
+    margin: 0;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Input con Iconos */
+.input-icon {
+    position: relative;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    z-index: 10;
+}
+
+.input-icon .form-control {
+    padding-left: 3rem;
+}
+
+/* Centrado Vertical */
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+/* Estilos Responsivos Adicionales */
+@media (max-width: 768px) {
+    .form-control, .form-select {
+        font-size: 16px; /* Evita zoom automático en iOS */
+    }
+    
+    .btn {
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        border-radius: 1rem;
+    }
+    
+    .card-header {
+        border-radius: 1rem 1rem 0 0 !important;
+    }
+    
+    .form-label {
+        font-size: 0.95rem;
+    }
+    
+    .input-icon i {
+        font-size: 0.9rem;
+    }
+}
+
+/* Mejoras de accesibilidad */
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    outline: none;
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* ==================== NAVBAR STYLES ==================== */
+.navbar {
+    background: rgba(15, 23, 42, 0.85) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    padding: 1rem 0;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.navbar-logo {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-logo i {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: translateY(-2px);
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar .btn-light {
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero-section {
+    background: transparent;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+}
+
+.hero-image {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    animation: float 3s ease-in-out infinite;
+}
+
+.hero-image i {
+    font-size: 8rem;
+    color: white;
+    opacity: 0.9;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.fade-in-delay {
+    animation: fadeIn 0.8s ease 0.3s both;
+}
+
+/* Hero Section Buttons */
+.btn-hero-gamer,
+.btn-hero-anime {
+    padding: 0.85rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 2px solid;
+}
+
+.btn-hero-gamer {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: #ef4444;
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-hero-gamer:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #dc2626;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+}
+
+.btn-hero-anime {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #7c3aed;
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.btn-hero-anime:hover {
+    background: rgba(124, 58, 237, 0.25);
+    border-color: #6d28d9;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+}
+
+/* ==================== FEATURES SECTION ==================== */
+.features-section {
+    background: transparent;
+    padding: 5rem 0;
+}
+
+.feature-card {
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    overflow: hidden;
+}
+
+.feature-card:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.feature-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+/* ==================== GAMER & ANIME CUSTOM STYLES ==================== */
+:root {
+    --gamer-gradient: linear-gradient(135deg, #0f172a 0%, #0b1220 100%);
+    --gamer-accent: #ef4444; /* rojo energético */
+    --anime-gradient: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+    --anime-accent: #7c3aed; /* violeta suave */
+}
+
+/* Logo styles para navbar y footer */
+.navbar-logo-img {
+    height: 50px;
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.navbar-logo-img:hover {
+    transform: scale(1.1);
+}
+
+.footer-logo-img {
+    height: 45px;
+    width: auto;
+    vertical-align: middle;
+}
+
+/* Gamer section: FONDO TRANSPARENTE */
+#gamer {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 4.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Container transparente - sin fondo */
+#gamer .container {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Eliminar borde interno */
+#gamer .container::before {
+    display: none;
+}
+
+/* CARDS con glassmorphism difuminado */
+#gamer .feature-card,
+#gamer .card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    border-radius: 1.5rem;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 0 60px rgba(239, 68, 68, 0.1);
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Borde interno en cada card */
+#gamer .feature-card::before,
+#gamer .card::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+}
+
+#gamer .feature-card .card-body {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#gamer .feature-card .feature-icon {
+    background: rgba(239, 68, 68, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(239, 68, 68, 0.6);
+}
+
+#gamer h3, #gamer p, #gamer .feature-icon i, #gamer h2, #gamer .lead {
+    color: white;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.8);
+}
+
+#gamer .feature-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 18px 50px rgba(239,68,68,0.3);
+    border-color: rgba(239,68,68,0.6);
+}
+
+#gamer .feature-icon i {
+    color: #ef4444;
+    filter: drop-shadow(0 0 10px rgba(239,68,68,0.8));
+}
+
+/* Anime section: FONDO TRANSPARENTE */
+#anime {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 4.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Container transparente - sin fondo */
+#anime .container {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Eliminar borde interno */
+#anime .container::before {
+    display: none;
+}
+
+/* CARDS con glassmorphism difuminado */
+#anime .feature-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-radius: 1.5rem;
+    border: 2px solid rgba(124, 58, 237, 0.35);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 0 60px rgba(124, 58, 237, 0.1);
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Borde interno en cada card */
+#anime .feature-card::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+}
+
+#anime .feature-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#anime .feature-icon {
+    background: rgba(124, 58, 237, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(124, 58, 237, 0.6);
+}
+
+#anime h3 {
+    color: #fff;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.8);
+}
+
+#anime h2 {
+    color: #fff;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.8);
+}
+
+#anime p, #anime .lead {
+    color: rgba(255,255,255,0.95);
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.9), 0 0 15px rgba(0,0,0,0.7);
+}
+
+#anime .feature-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(124,58,237,0.6);
+    box-shadow: 0 18px 50px rgba(124,58,237,0.3);
+}
+
+#anime .feature-icon i {
+    color: #7c3aed;
+    filter: drop-shadow(0 0 10px rgba(124,58,237,0.8));
+}
+
+/* Shared improvements: spacing, accessible contrast and focus */
+.features-section .feature-card .card-body {
+    padding: 2rem;
+}
+
+.feature-card a,
+.feature-card button {
+    margin-top: 1rem;
+}
+
+/* Focus outlines for keyboard users */
+#gamer .feature-card:focus-within,
+#anime .feature-card:focus-within,
+.feature-card:focus {
+    outline: 3px solid rgba(124,58,237,0.14);
+    outline-offset: 6px;
+}
+
+/* Responsive tweaks for the new sections */
+@media (max-width: 768px) {
+    #gamer .feature-icon, #anime .feature-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    #gamer .feature-card .feature-icon i,
+    #anime .feature-card .feature-icon i {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small decorative accent under section titles to improve visual hierarchy */
+.features-section .display-5 {
+    position: relative;
+}
+
+.features-section .display-5::after {
+    content: "";
+    width: 60px;
+    height: 6px;
+    display: block;
+    margin: 12px auto 0;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+}
+
+/* ==================== STATS SECTION ==================== */
+.stats-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    padding: 4rem 0;
+}
+
+.stat-item {
+    padding: 2rem 1rem;
+}
+
+/* ==================== FOOTER STYLES ==================== */
+.footer-section {
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    color: white;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.footer-brand {
+    color: white;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: white;
+    padding-left: 5px;
+}
+
+.footer-contact li {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.75rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: white;
+    color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* ==================== RESPONSIVE HOME ==================== */
+@media (max-width: 768px) {
+    .hero-section {
+        padding-top: 100px;
+    }
+    
+    .hero-image {
+        width: 200px;
+        height: 200px;
+        margin-top: 2rem;
+    }
+    
+    .hero-image i {
+        font-size: 5rem;
+    }
+    
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .features-section {
+        padding: 3rem 0;
+    }
+}
+
+/* ==================== LOGIN PAGE STYLES ==================== */
+
+/* Login Card con Glassmorphism */
+.login-card {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 2rem;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 0 80px rgba(79, 70, 229, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Borde interno brillante */
+.login-card::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 12px 48px rgba(0, 0, 0, 0.5),
+        inset 0 0 100px rgba(79, 70, 229, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Logo Container */
+.login-logo-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+.login-logo-container i {
+    font-size: 2.2rem;
+    color: white;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Títulos */
+.login-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+.login-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Input Groups Modernos */
+.input-group-modern {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.input-group-modern.focused {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(79, 70, 229, 0.5);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.input-icon-modern {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+}
+
+.form-control-modern {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.875rem 0.75rem;
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.form-control-modern::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-control-modern:focus {
+    outline: none;
+}
+
+/* Toggle Password Button */
+.toggle-password {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-password:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Form Check Modern */
+.form-check-modern {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-check-input-modern {
+    width: 18px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-check-input-modern:checked {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-color: var(--primary-color);
+}
+
+.form-check-label-modern {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Links Modernos */
+.link-modern {
+    color: rgba(79, 70, 229, 0.9);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.link-modern::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: rgba(79, 70, 229, 0.9);
+    transition: width 0.3s ease;
+}
+
+.link-modern:hover {
+    color: white;
+}
+
+.link-modern:hover::after {
+    width: 100%;
+}
+
+/* Botones Modernos */
+.btn-modern {
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-modern:hover::before {
+    left: 100%;
+}
+
+.btn-modern-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.btn-modern-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+}
+
+.btn-modern-primary:active {
+    transform: translateY(0);
+}
+
+.btn-modern-social {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-modern-social:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Divider */
+.divider-modern {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.divider-modern::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.divider-modern span {
+    background: rgba(15, 23, 42, 0.9);
+    padding: 0 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Login */
+@media (max-width: 576px) {
+    .login-card {
+        border-radius: 1.5rem;
+    }
+    
+    .login-title {
+        font-size: 1.5rem;
+    }
+    
+    .login-logo-container {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .login-logo-container i {
+        font-size: 1.8rem;
+    }
+    
+    .btn-modern {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* ==================== GAMER PAGE STYLES ==================== */
+
+/* Gamer Hero Section */
+.gamer-hero-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.3) 0%, rgba(30, 41, 59, 0.2) 100%);
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba(239, 68, 68, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 2rem;
+    color: #ef4444;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.gamer-hero-icon {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    background: rgba(239, 68, 68, 0.15);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: float 3s ease-in-out infinite;
+}
+
+.gamer-hero-icon i {
+    font-size: 6rem;
+    color: #ef4444;
+    filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.6));
+}
+
+/* Gamer Cards */
+.gamer-card {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.gamer-card::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 1.3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.gamer-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 20px 50px rgba(239, 68, 68, 0.3);
+}
+
+.gamer-card-header {
+    position: relative;
+}
+
+.game-thumbnail {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+
+.game-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.game-badge.badge-hot {
+    background: rgba(239, 68, 68, 0.9);
+    border-color: rgba(239, 68, 68, 0.8);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.gamer-card-body {
+    padding: 1.5rem;
+}
+
+.game-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+/* Gamer Buttons */
+.btn-gamer-primary,
+.btn-gamer-outline {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-gamer-primary {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 2px solid #ef4444;
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-gamer-primary:hover {
+    transform: translateY(-2px);
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #dc2626;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    color: white;
+}
+
+.btn-gamer-outline {
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(10px) saturate(180%);
+    color: white;
+    border: 2px solid rgba(239, 68, 68, 0.6);
+}
+
+.btn-gamer-outline:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+    color: white;
+}
+
+.btn-gamer-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* News Cards */
+.news-card-horizontal {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.news-card-horizontal:hover {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: translateX(5px);
+}
+
+.news-icon {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.news-date {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.news-link {
+    color: #ef4444;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.news-link:hover {
+    color: white;
+    gap: 0.5rem;
+}
+
+/* Guide Cards */
+.guide-card {
+    padding: 2rem 1.5rem;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.guide-card:hover {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: rgba(239, 68, 68, 0.3);
+    transform: translateY(-5px);
+}
+
+.guide-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+}
+
+/* CTA Gamer */
+.cta-gamer-section {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.3) 100%);
+}
+
+.cta-gamer-card {
+    padding: 4rem 2rem;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    border-radius: 2rem;
+    box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2);
+}
+
+/* ==================== ANIME PAGE STYLES ==================== */
+
+/* Anime Hero Section */
+.anime-hero-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    background: linear-gradient(135deg, rgba(255, 247, 237, 0.15) 0%, rgba(254, 243, 199, 0.1) 100%);
+}
+
+.hero-badge-anime {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba(124, 58, 237, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 2rem;
+    color: #7c3aed;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.anime-hero-icon {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    background: rgba(124, 58, 237, 0.15);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(124, 58, 237, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: float 3s ease-in-out infinite;
+}
+
+.anime-hero-icon i {
+    font-size: 6rem;
+    color: #7c3aed;
+    filter: drop-shadow(0 0 20px rgba(124, 58, 237, 0.6));
+}
+
+/* Anime Cards */
+.anime-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid rgba(124, 58, 237, 0.3);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.anime-card::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 1.3rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+}
+
+.anime-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(124, 58, 237, 0.5);
+    box-shadow: 0 20px 50px rgba(124, 58, 237, 0.3);
+}
+
+.anime-card-header {
+    position: relative;
+}
+
+.anime-thumbnail {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+
+.anime-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.anime-badge.badge-new {
+    background: rgba(124, 58, 237, 0.9);
+    border-color: rgba(124, 58, 237, 0.8);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.anime-card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.anime-synopsis {
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    min-height: 3.6em;
+}
+
+.anime-genre {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.genre-tag {
+    padding: 0.25rem 0.75rem;
+    background: rgba(124, 58, 237, 0.2);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    color: #a78bfa;
+    font-weight: 600;
+}
+
+.anime-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Anime Buttons */
+.btn-anime-primary,
+.btn-anime-outline {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.btn-anime-primary {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 2px solid #7c3aed;
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.btn-anime-primary:hover {
+    transform: translateY(-2px);
+    background: rgba(124, 58, 237, 0.25);
+    border-color: #6d28d9;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+    color: white;
+}
+
+.btn-anime-outline {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px) saturate(180%);
+    color: white;
+    border: 2px solid rgba(124, 58, 237, 0.6);
+}
+
+.btn-anime-outline:hover {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: #7c3aed;
+    color: white;
+}
+
+.btn-anime-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* Season Cards */
+.season-card-horizontal {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.season-card-horizontal:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(124, 58, 237, 0.3);
+    transform: translateX(5px);
+}
+
+.season-icon {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.season-badge {
+    padding: 0.25rem 0.75rem;
+    background: rgba(124, 58, 237, 0.2);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a78bfa;
+}
+
+.season-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.season-tags .tag {
+    padding: 0.2rem 0.6rem;
+    background: rgba(124, 58, 237, 0.15);
+    border-radius: 0.4rem;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Movie Cards */
+.movie-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+
+.movie-thumbnail {
+    height: 220px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+
+.movie-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+
+.btn-play {
+    width: 60px;
+    height: 60px;
+    background: rgba(124, 58, 237, 0.9);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-play:hover {
+    transform: scale(1.1);
+    background: #7c3aed;
+}
+
+.movie-info {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.movie-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: white;
+    font-weight: 600;
+}
+
+/* Genre Cards */
+.genre-card {
+    padding: 1.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.genre-card:hover {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateY(-3px);
+}
+
+.genre-card i {
+    font-size: 2rem;
+    color: #7c3aed;
+}
+
+.genre-card span {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* CTA Anime */
+.cta-anime-section {
+    background: linear-gradient(135deg, rgba(255, 247, 237, 0.1) 0%, rgba(254, 243, 199, 0.08) 100%);
+}
+
+.cta-anime-card {
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(124, 58, 237, 0.3);
+    border-radius: 2rem;
+    box-shadow: 0 10px 40px rgba(124, 58, 237, 0.2);
+}
+
+/* Responsive Pages */
+@media (max-width: 768px) {
+    .gamer-hero-icon,
+    .anime-hero-icon {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .gamer-hero-icon i,
+    .anime-hero-icon i {
+        font-size: 4rem;
+    }
+    
+    .news-card-horizontal,
+    .season-card-horizontal {
+        flex-direction: column;
+    }
+    
+    .movie-thumbnail {
+        height: 180px;
+    }
+}
+
+/* Navbar Dropdown Styles */
+.navbar .dropdown-menu {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.navbar .dropdown-item {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.75rem 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.navbar .dropdown-item:hover {
+    background: rgba(79, 70, 229, 0.2);
+    color: white;
+    transform: translateX(5px);
+}
+
+.navbar .dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.navbar .dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+    margin: 0.5rem 0;
+}
+
+.navbar .dropdown-toggle::after {
+    margin-left: 0.5rem;
+    vertical-align: 0.1em;
+}
+
+/* ==================== ANIME DETAIL PAGE STYLES ==================== */
+
+/* Hero Section */
+.anime-detail-hero {
+    position: relative;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%);
+}
+
+.anime-poster-card {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 3px solid rgba(124, 58, 237, 0.4);
+    transition: all 0.4s ease;
+}
+
+.anime-poster-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(124, 58, 237, 0.6);
+    box-shadow: 0 25px 70px rgba(124, 58, 237, 0.3);
+}
+
+.anime-title-glow {
+    text-shadow: 0 0 20px rgba(124, 58, 237, 0.5),
+                 0 0 40px rgba(124, 58, 237, 0.3),
+                 3px 3px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Badges */
+.badge-anime-status {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 2px solid;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.badge-airing {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: #22c55e;
+    color: #4ade80;
+}
+
+.badge-finished {
+    background: rgba(148, 163, 184, 0.2);
+    border-color: #94a3b8;
+    color: #cbd5e1;
+}
+
+.badge-anime-featured {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(251, 191, 36, 0.2);
+    border: 2px solid #fbbf24;
+    color: #fcd34d;
+    backdrop-filter: blur(10px);
+}
+
+.badge-anime-type {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(124, 58, 237, 0.2);
+    border: 2px solid #7c3aed;
+    color: #a78bfa;
+    backdrop-filter: blur(10px);
+}
+
+.badge-anime-count {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: rgba(124, 58, 237, 0.3);
+    border: 2px solid rgba(124, 58, 237, 0.5);
+    color: #c4b5fd;
+    backdrop-filter: blur(10px);
+}
+
+/* Stats Grid */
+.anime-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.stat-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(124, 58, 237, 0.4);
+    transform: translateY(-2px);
+}
+
+.stat-box i {
+    font-size: 1.5rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    display: block;
+}
+
+/* Detail Cards */
+.anime-detail-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.anime-detail-card:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(124, 58, 237, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Episodes Grid */
+.episodes-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.episode-item {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.episode-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #7c3aed, #a78bfa);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.episode-item:hover {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateX(5px);
+}
+
+.episode-item:hover::before {
+    opacity: 1;
+}
+
+.episode-thumbnail-wrapper {
+    position: relative;
+    width: 160px;
+    min-width: 160px;
+    height: 90px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.episode-thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.episode-thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(147, 51, 234, 0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 2rem;
+}
+
+.episode-play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.episode-item:hover .episode-play-overlay {
+    opacity: 1;
+}
+
+.episode-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.episode-number {
+    padding: 0.25rem 0.75rem;
+    background: rgba(124, 58, 237, 0.3);
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #c4b5fd;
+    display: inline-block;
+    width: fit-content;
+}
+
+.episode-duration {
+    padding: 0.25rem 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: auto;
+}
+
+.episode-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.episode-description {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.episode-views {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: auto;
+}
+
+/* Info List */
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.info-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    min-width: 100px;
+}
+
+.info-value {
+    color: white;
+    font-weight: 600;
+    text-align: right;
+    flex: 1;
+}
+
+.genres-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.genre-badge {
+    padding: 0.375rem 0.875rem;
+    background: rgba(124, 58, 237, 0.25);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #c4b5fd;
+    transition: all 0.3s ease;
+}
+
+.genre-badge:hover {
+    background: rgba(124, 58, 237, 0.4);
+    border-color: rgba(124, 58, 237, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Trailer */
+.trailer-wrapper {
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 2px solid rgba(124, 58, 237, 0.3);
+}
+
+.trailer-wrapper iframe {
+    border: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .anime-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .episode-item {
+        flex-direction: column;
+    }
+    
+    .episode-thumbnail-wrapper {
+        width: 100%;
+        max-width: 100%;
+        height: 180px;
+    }
+    
+    .episode-duration {
+        margin-left: 0.5rem;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .info-value {
+        text-align: left;
+    }
+    
+    .genres-wrapper {
+        justify-content: flex-start;
+    }
+}
+
+

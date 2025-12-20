@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Footer Fragment -->
+    <footer th:fragment="footer" class="footer-section">
+        <div class="container py-5">
+            <div class="row g-4">
+                <!-- Columna 1: Información -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand mb-3">
+                        <img src="/images/logo.png" alt="Grand Line Logo" class="footer-logo-img me-2">
+                        <h5 class="d-inline-block mb-0">Grand Line</h5>
+                    </div>
+                    <p class="text-white-50 mb-3">
+                        Tu destino para todo sobre gaming y anime. Únete a la aventura.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Enlaces Rápidos -->
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Secciones</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="/">Inicio</a></li>
+                        <li><a href="#gamer">Gamer</a></li>
+                        <li><a href="#anime">Anime</a></li>
+                        <li><a href="/login">Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Recursos -->
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Recursos</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li><a href="#">Comunidad</a></li>
+                        <li><a href="#">Noticias</a></li>
+                        <li><a href="#">Reseñas</a></li>
+                        <li><a href="#">Eventos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Contacto -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Contacto</h6>
+                    <ul class="footer-contact list-unstyled">
+                        <li>
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            New World, Grand Line
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope me-2"></i>
+                            info@grandline.com
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4 border-secondary">
+
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="text-white-50 mb-0">
+                        &copy; 2025 Grand Line. Todos los derechos reservados.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-white-50 text-decoration-none me-3">Política de Privacidad</a>
+                    <a href="#" class="text-white-50 text-decoration-none">Términos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
