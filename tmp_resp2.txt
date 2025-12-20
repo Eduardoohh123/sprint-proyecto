@@ -1,1 +1,0 @@
-error: No se pudo crear usuario en Supabase: SUPABASE_HOST no está configurado
