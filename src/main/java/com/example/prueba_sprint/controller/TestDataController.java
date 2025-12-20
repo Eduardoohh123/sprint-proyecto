@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,14 @@ public class TestDataController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private com.example.prueba_sprint.service.UserService userService;
+
+    @Autowired
+    private com.example.prueba_sprint.service.SupabaseAdminService supabaseAdminService;
+
+    private static final Logger log = LoggerFactory.getLogger(TestDataController.class);
+
     /**
      * Obtener estadísticas de la base de datos
      */
@@ -41,6 +51,27 @@ public class TestDataController {
         stats.put("games", gameRepository.count());
         stats.put("timestamp", System.currentTimeMillis());
         return ResponseEntity.ok(stats);
+    }
+
+    /**
+     * Endpoint de diagnóstico/health para Supabase Admin API (temporal)
+     */
+    @GetMapping("/supabase")
+    public ResponseEntity<Map<String, Object>> supabaseStatus() {
+        try {
+            Map<String, Object> status = supabaseAdminService.healthCheck();
+            boolean ok = Boolean.TRUE.equals(status.get("ok"));
+            if (ok) {
+                return ResponseEntity.ok(status);
+            } else {
+                return ResponseEntity.status(502).body(status);
+            }
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
     }
 
     /**
@@ -108,40 +139,44 @@ public class TestDataController {
             String email = userData.get("email");
             String password = userData.get("password");
 
-            // Validar que no exista el usuario
-            if (userRepository.findByUsername(username).isPresent()) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "El nombre de usuario ya está en uso");
-                response.put("status", "error");
-                return ResponseEntity.status(400).body(response);
-            }
-
-            if (userRepository.findByEmail(email).isPresent()) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "El correo electrónico ya está registrado");
-                response.put("status", "error");
-                return ResponseEntity.status(400).body(response);
-            }
-
-            // Crear usuario
+            // Construir entidad User y delegar en el servicio centralizado
             User user = new User();
             user.setUsername(username);
             user.setName(name);
             user.setEmail(email);
-            // Hashear la contraseña antes de guardar
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(password);
             user.setRole("USER");
-            
-            User savedUser = userRepository.save(user);
+
+            log.info("Registrando usuario desde API: {}", email);
+
+            User savedUser = userService.registerUser(user);
 
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Usuario registrado exitosamente");
             response.put("status", "success");
-            response.put("userId", savedUser.getId());
-            response.put("username", savedUser.getUsername());
+
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", savedUser.getId());
+            userInfo.put("username", savedUser.getUsername());
+            userInfo.put("name", savedUser.getName());
+            userInfo.put("email", savedUser.getEmail());
+            userInfo.put("supabaseId", savedUser.getSupabaseId());
+
+            response.put("user", userInfo);
             return ResponseEntity.ok(response);
-            
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Registro rechazado: {}", e.getMessage());
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", e.getMessage());
+            response.put("status", "error");
+            // Si el error viene del upstream Supabase, devolver 502 Bad Gateway
+            if (e.getMessage().toLowerCase().contains("supabase") || e.getMessage().toLowerCase().contains("service_role_key")) {
+                return ResponseEntity.status(502).body(response);
+            }
+            return ResponseEntity.status(400).body(response);
         } catch (Exception e) {
+            log.error("Error al registrar usuario: {}", e.getMessage(), e);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Error al registrar usuario: " + e.getMessage());
             response.put("status", "error");

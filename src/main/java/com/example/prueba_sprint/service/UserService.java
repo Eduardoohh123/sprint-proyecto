@@ -66,6 +66,8 @@ public class UserService {
             String supabaseUid = supabaseAdminService.createUser(user.getEmail(), user.getPassword());
             user.setSupabaseId(supabaseUid);
         } catch (Exception e) {
+            // Loguear detalle para que el deploy en Render lo muestre y sea más fácil el diagnóstico
+            System.err.println("Error registrando en Supabase: " + e.getMessage());
             throw new IllegalArgumentException("No se pudo crear usuario en Supabase: " + e.getMessage());
         }
         
