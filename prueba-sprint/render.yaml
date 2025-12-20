@@ -2,6 +2,7 @@ services:
   - type: web
     name: prueba-sprint-api
     env: java
+    rootDir: prueba-sprint
     buildCommand: ./mvnw clean package -DskipTests
     startCommand: java -jar target/prueba-sprint-0.0.1-SNAPSHOT.jar
     envVars:
