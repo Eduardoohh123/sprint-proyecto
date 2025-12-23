@@ -295,6 +295,53 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal (debug): crear usuario vía GET para diagnosticar problemas con POST/redirecciones
+     * Uso: GET /api/test/users/register-debug?email=...&password=...&username=...&name=...
+     */
+    @GetMapping("/users/register-debug")
+    public ResponseEntity<Map<String, Object>> registerUserDebug(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String name
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setUsername(username != null && !username.trim().isEmpty() ? username : email.split("@")[0]);
+            user.setName(name);
+            user.setRole("USER");
+
+            log.info("Registrando usuario (debug GET) desde API: {}", email);
+
+            User savedUser = userService.registerUser(user);
+
+            response.put("ok", true);
+            response.put("message", "Usuario registrado exitosamente (debug)");
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", savedUser.getId());
+            userInfo.put("username", savedUser.getUsername());
+            userInfo.put("name", savedUser.getName());
+            userInfo.put("email", savedUser.getEmail());
+            userInfo.put("supabaseId", savedUser.getSupabaseId());
+            response.put("user", userInfo);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            log.warn("Registro debug rechazado: {}", e.getMessage());
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        } catch (Exception e) {
+            log.error("Error al registrar (debug): {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
