@@ -37,6 +37,9 @@ public class TestDataController {
     @Autowired
     private com.example.prueba_sprint.service.SupabaseAdminService supabaseAdminService;
 
+    @Autowired
+    private javax.sql.DataSource dataSource;
+
     private static final Logger log = LoggerFactory.getLogger(TestDataController.class);
 
     /**
@@ -73,7 +76,30 @@ public class TestDataController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    /**
+     * Endpoint temporal para ejecutar el script schema.sql en la BD de producción.
+     * Uso: POST /api/test/run-schema
+     * ADVERTENCIA: solo para uso de mantenimiento en staging/provisión — eliminar tras uso.
+     */
+    @PostMapping("/run-schema")
+    public ResponseEntity<Map<String, Object>> runSchema() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Ejecutar script SQL incluida en classpath: schema.sql
+            org.springframework.core.io.ClassPathResource resource = new org.springframework.core.io.ClassPathResource("schema.sql");
+            org.springframework.jdbc.datasource.init.ResourceDatabasePopulator pop = new org.springframework.jdbc.datasource.init.ResourceDatabasePopulator(resource);
+            pop.execute(this.dataSource);
 
+            response.put("ok", true);
+            response.put("message", "Schema ejecutado correctamente");
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error ejecutando schema.sql: {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", "Error ejecutando schema.sql: " + ex.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
     /**
      * Insertar datos de prueba
      */
