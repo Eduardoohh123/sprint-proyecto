@@ -446,6 +446,26 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal (debug): crear usuario directamente en Supabase (sin tocar BD local)
+     * Uso: GET /api/test/supabase/create?email=...&password=...
+     */
+    @GetMapping("/supabase/create")
+    public ResponseEntity<Map<String, Object>> createSupabaseOnly(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String uid = supabaseAdminService.createUser(email, password);
+            response.put("ok", uid != null && !uid.isBlank());
+            response.put("supabaseId", uid);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error creando usuario en Supabase (solo): {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(502).body(response);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
