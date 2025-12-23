@@ -387,6 +387,65 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal: crear usuario en Supabase para un usuario local existente y guardar supabaseId
+     * Uso: GET /api/test/users/link-supabase?email=...&password=...
+     */
+    @GetMapping("/users/link-supabase")
+    public ResponseEntity<Map<String, Object>> linkUserToSupabase(
+            @RequestParam String email,
+            @RequestParam String password
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                response.put("ok", false);
+                response.put("message", "No existe usuario local con ese email");
+                return ResponseEntity.status(404).body(response);
+            }
+
+            User user = userOpt.get();
+
+            if (user.getSupabaseId() != null && !user.getSupabaseId().isBlank()) {
+                response.put("ok", false);
+                response.put("message", "Usuario ya tiene supabaseId");
+                response.put("supabaseId", user.getSupabaseId());
+                return ResponseEntity.status(400).body(response);
+            }
+
+            // Llamar Supabase Admin API para crear el usuario
+            String supabaseUid;
+            try {
+                supabaseUid = supabaseAdminService.createUser(user.getEmail(), password);
+            } catch (Exception ex) {
+                log.error("Error creando usuario en Supabase para {}: {}", email, ex.getMessage(), ex);
+                response.put("ok", false);
+                response.put("message", "Error creando usuario en Supabase: " + ex.getMessage());
+                return ResponseEntity.status(502).body(response);
+            }
+
+            if (supabaseUid == null || supabaseUid.isBlank()) {
+                response.put("ok", false);
+                response.put("message", "Supabase no devolvió UID");
+                return ResponseEntity.status(502).body(response);
+            }
+
+            user.setSupabaseId(supabaseUid);
+            userRepository.save(user);
+
+            response.put("ok", true);
+            response.put("message", "Usuario vinculado a Supabase");
+            response.put("supabaseId", supabaseUid);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error en linkUserToSupabase: {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
