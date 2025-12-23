@@ -495,6 +495,27 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal para comprobar estado de seguridad y sesión
+     * GET /api/test/ping
+     */
+    @GetMapping("/ping")
+    public ResponseEntity<Map<String, Object>> ping() {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            resp.put("ok", true);
+            resp.put("authenticated", auth != null && auth.isAuthenticated());
+            resp.put("principal", auth != null ? auth.getPrincipal() : null);
+            resp.put("authorities", auth != null ? auth.getAuthorities() : Collections.emptyList());
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
