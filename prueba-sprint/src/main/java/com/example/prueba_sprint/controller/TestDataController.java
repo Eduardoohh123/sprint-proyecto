@@ -127,6 +127,28 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal para listar columnas de una tabla (solo diagnóstico)
+     * Uso: GET /api/test/columns?table=users
+     */
+    @GetMapping("/columns")
+    public ResponseEntity<Object> listColumns(@RequestParam String table) {
+        try {
+            org.springframework.jdbc.core.JdbcTemplate jt = new org.springframework.jdbc.core.JdbcTemplate(this.dataSource);
+            java.util.List<java.util.Map<String, Object>> cols = jt.queryForList(
+                    "select column_name, data_type from information_schema.columns where table_name = ? order by ordinal_position",
+                    table
+            );
+            return ResponseEntity.ok(cols);
+        } catch (Exception ex) {
+            log.error("Error en columns: {}", ex.getMessage(), ex);
+            java.util.Map<String, Object> resp = new java.util.HashMap<>();
+            resp.put("ok", false);
+            resp.put("message", ex.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
      * Endpoint temporal de depuración: devuelve información pública sobre un usuario por email.
      * Uso: GET /api/test/users/debug?email=...  (dev-only)
      */

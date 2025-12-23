@@ -26,6 +26,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     avatar_url VARCHAR(500),
+    supabase_id VARCHAR(255) UNIQUE,
     role VARCHAR(50) DEFAULT 'USER' NOT NULL, -- USER, ADMIN
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uk_users_username UNIQUE (username),
@@ -36,6 +37,11 @@ CREATE TABLE users (
 CREATE INDEX idx_users_username ON users(username);
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
+
+-- ============================================
+-- Asegurar columna supabase_id para compatibilidad con la entidad User
+ALTER TABLE users ADD COLUMN IF NOT EXISTS supabase_id VARCHAR(255);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_supabase_id ON users(supabase_id);
 
 -- ============================================
 -- TABLA: categories
