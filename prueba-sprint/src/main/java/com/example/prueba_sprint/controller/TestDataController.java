@@ -466,6 +466,35 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal (debug): asignar manualmente supabaseId a usuario local existente
+     * Uso: GET /api/test/users/set-supabase?email=...&supabaseId=...
+     */
+    @GetMapping("/users/set-supabase")
+    public ResponseEntity<Map<String, Object>> setSupabaseIdForUser(@RequestParam String email, @RequestParam String supabaseId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                response.put("ok", false);
+                response.put("message", "No existe usuario local con ese email");
+                return ResponseEntity.status(404).body(response);
+            }
+            User user = userOpt.get();
+            user.setSupabaseId(supabaseId);
+            userRepository.save(user);
+            response.put("ok", true);
+            response.put("message", "supabaseId asignado");
+            response.put("supabaseId", supabaseId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error en setSupabaseIdForUser: {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
