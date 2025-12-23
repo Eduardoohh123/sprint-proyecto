@@ -32,6 +32,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Rutas públicas de la API REST para Ionic
                 .requestMatchers("/api/**").permitAll()
+                // Asegurar rutas de diagnóstico /api/test/** (temporal)
+                .requestMatchers("/api/test/**").permitAll()
                 
                 // Rutas públicas de la aplicación web
                 .requestMatchers(
