@@ -342,6 +342,51 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal: crear usuario localmente sin llamar a Supabase (solo para depuración)
+     * Uso: GET /api/test/users/create-local?email=...&password=...&username=...&name=...
+     */
+    @GetMapping("/users/create-local")
+    public ResponseEntity<Map<String, Object>> createLocalUser(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String name
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            if (userRepository.findByEmail(email).isPresent()) {
+                response.put("ok", false);
+                response.put("message", "Email ya existe");
+                return ResponseEntity.status(400).body(response);
+            }
+
+            User user = new User();
+            user.setEmail(email);
+            user.setUsername(username != null && !username.trim().isEmpty() ? username : email.split("@")[0]);
+            user.setName(name);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setRole("USER");
+
+            User saved = userRepository.save(user);
+
+            response.put("ok", true);
+            response.put("message", "Usuario local creado");
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", saved.getId());
+            userInfo.put("email", saved.getEmail());
+            userInfo.put("username", saved.getUsername());
+            userInfo.put("supabaseId", saved.getSupabaseId());
+            response.put("user", userInfo);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error creando usuario local: {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
