@@ -37,6 +37,9 @@ public class TestDataController {
     @Autowired
     private com.example.prueba_sprint.service.SupabaseAdminService supabaseAdminService;
 
+    @Autowired
+    private javax.sql.DataSource dataSource;
+
     private static final Logger log = LoggerFactory.getLogger(TestDataController.class);
 
     /**
@@ -73,7 +76,92 @@ public class TestDataController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    /**
+     * Endpoint temporal para ejecutar el script schema.sql en la BD de producción.
+     * Uso: POST /api/test/run-schema
+     * ADVERTENCIA: solo para uso de mantenimiento en staging/provisión — eliminar tras uso.
+     */
+    @PostMapping("/run-schema")
+    public ResponseEntity<Map<String, Object>> runSchema() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Ejecutar script SQL incluida en classpath: schema.sql
+            org.springframework.core.io.ClassPathResource resource = new org.springframework.core.io.ClassPathResource("schema.sql");
+            org.springframework.jdbc.datasource.init.ResourceDatabasePopulator pop = new org.springframework.jdbc.datasource.init.ResourceDatabasePopulator(resource);
+            pop.execute(this.dataSource);
 
+            response.put("ok", true);
+            response.put("message", "Schema ejecutado correctamente");
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error ejecutando schema.sql: {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", "Error ejecutando schema.sql: " + ex.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal para verificar existencia de la tabla `users` y su recuento.
+     */
+    @GetMapping("/db-check")
+    public ResponseEntity<Map<String, Object>> dbCheck() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            org.springframework.jdbc.core.JdbcTemplate jt = new org.springframework.jdbc.core.JdbcTemplate(this.dataSource);
+            Integer exists = jt.queryForObject("select count(*) from information_schema.tables where table_schema='public' and table_name='users'", Integer.class);
+            response.put("table_exists", exists != null && exists > 0);
+            if (exists != null && exists > 0) {
+                Integer count = jt.queryForObject("select count(*) from users", Integer.class);
+                response.put("users_count", count != null ? count : 0);
+            } else {
+                response.put("users_count", 0);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error en db-check: {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal de depuración: devuelve información pública sobre un usuario por email.
+     * Uso: GET /api/test/users/debug?email=...  (dev-only)
+     */
+    @GetMapping("/users/debug")
+    public ResponseEntity<Map<String, Object>> debugUser(@RequestParam String email) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                response.put("found", false);
+                response.put("message", "No existe usuario con ese email");
+                return ResponseEntity.status(404).body(response);
+            }
+            User u = userOpt.get();
+            response.put("found", true);
+            response.put("id", u.getId());
+            response.put("username", u.getUsername());
+            response.put("name", u.getName());
+            response.put("email", u.getEmail());
+            response.put("supabaseId", u.getSupabaseId());
+            response.put("role", u.getRole());
+            response.put("createdAt", u.getCreatedAt());
+            // Indicador de si la contraseña parece hasheada con bcrypt
+            String pw = u.getPassword();
+            boolean looksHashed = (pw != null && pw.startsWith("$2"));
+            response.put("passwordLooksHashed", looksHashed);
+            // No devolver la contraseña ni hashes
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error en users/debug: {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
     /**
      * Insertar datos de prueba
      */
