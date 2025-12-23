@@ -535,6 +535,59 @@ public class TestDataController {
     }
 
     /**
+     * Endpoint temporal (GET) para establecer contraseña (hash) sin usar POST (debug)
+     * Uso: GET /api/test/users/set-password-get?email=...&password=...
+     */
+    @GetMapping("/users/set-password-get")
+    public ResponseEntity<Map<String, Object>> setPasswordGet(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                resp.put("ok", false);
+                resp.put("message", "No existe usuario con ese email");
+                return ResponseEntity.status(404).body(resp);
+            }
+            User user = userOpt.get();
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+            resp.put("ok", true);
+            resp.put("message", "Contraseña actualizada y hasheada (GET)");
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
+     * Endpoint temporal (GET) para autenticar sin usar POST
+     * Uso: GET /api/test/users/auth?email=...&password=...
+     */
+    @GetMapping("/users/auth")
+    public ResponseEntity<Map<String, Object>> authGet(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                resp.put("ok", false);
+                resp.put("message", "No existe usuario con ese email");
+                return ResponseEntity.status(404).body(resp);
+            }
+            User user = userOpt.get();
+            boolean matches = passwordEncoder.matches(password, user.getPassword());
+            resp.put("ok", true);
+            resp.put("authenticated", matches);
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")
