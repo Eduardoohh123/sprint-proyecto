@@ -516,6 +516,24 @@ public class TestDataController {
     }
 
     /**
+     * Devuelve eventos recientes capturados por RequestSecurityDebugFilter
+     * GET /api/test/logs
+     */
+    @GetMapping("/logs")
+    public ResponseEntity<Map<String, Object>> logs() {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            resp.put("ok", true);
+            resp.put("events", com.example.prueba_sprint.filter.RequestSecurityDebugFilter.recentEvents());
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
      * Login de usuario (desde Ionic)
      */
     @PostMapping("/users/login")

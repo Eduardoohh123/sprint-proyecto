@@ -12,8 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -21,21 +24,34 @@ public class RequestSecurityDebugFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(RequestSecurityDebugFilter.class);
 
+    // In-memory bounded buffer of recent debug events
+    private static final int MAX_EVENTS = 200;
+    private static final LinkedList<String> EVENTS = new LinkedList<>();
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
             String path = request.getRequestURI();
             if (path != null && path.startsWith("/api/test")) {
-                log.debug("[SEC-DBG] Incoming request: method={} uri={} remote={} headers=[{}]",
-                        request.getMethod(), path, request.getRemoteAddr(), getRelevantHeaders(request));
-
+                String headers = getRelevantHeaders(request);
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                String authInfo;
                 if (auth == null) {
-                    log.debug("[SEC-DBG] SecurityContext authentication = null (unauthenticated)");
+                    authInfo = "unauthenticated";
                 } else {
-                    log.debug("[SEC-DBG] Authentication present: name={} authenticated={} authorities={}",
-                            auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
+                    authInfo = String.format("name=%s authenticated=%s authorities=%s", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
                 }
+
+                String evt = String.format("%s | method=%s uri=%s remote=%s auth=[%s] headers=[%s]",
+                        Instant.now().toString(), request.getMethod(), path, request.getRemoteAddr(), authInfo, headers);
+
+                // append to buffer (thread-safe-ish since LinkedList used only under synchronized)
+                synchronized (EVENTS) {
+                    EVENTS.addFirst(evt);
+                    if (EVENTS.size() > MAX_EVENTS) EVENTS.removeLast();
+                }
+
+                log.debug("[SEC-DBG] {}", evt);
             }
         } catch (Exception e) {
             log.error("[SEC-DBG] Error in RequestSecurityDebugFilter: {}", e.getMessage(), e);
@@ -61,5 +77,12 @@ public class RequestSecurityDebugFilter extends OncePerRequestFilter {
             }
         }
         return sb.toString();
+    }
+
+    // Expose recent events for diagnostics
+    public static List<String> recentEvents() {
+        synchronized (EVENTS) {
+            return List.copyOf(EVENTS);
+        }
     }
 }
