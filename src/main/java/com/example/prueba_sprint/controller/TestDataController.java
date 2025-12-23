@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/test")
@@ -123,6 +124,28 @@ public class TestDataController {
             response.put("ok", false);
             response.put("message", ex.getMessage());
             return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal para listar columnas de una tabla (solo diagnóstico)
+     * Uso: GET /api/test/columns?table=users
+     */
+    @GetMapping("/columns")
+    public ResponseEntity<Object> listColumns(@RequestParam String table) {
+        try {
+            org.springframework.jdbc.core.JdbcTemplate jt = new org.springframework.jdbc.core.JdbcTemplate(this.dataSource);
+            java.util.List<java.util.Map<String, Object>> cols = jt.queryForList(
+                    "select column_name, data_type from information_schema.columns where table_name = ? order by ordinal_position",
+                    table
+            );
+            return ResponseEntity.ok(cols);
+        } catch (Exception ex) {
+            log.error("Error en columns: {}", ex.getMessage(), ex);
+            java.util.Map<String, Object> resp = new java.util.HashMap<>();
+            resp.put("ok", false);
+            resp.put("message", ex.getMessage());
+            return ResponseEntity.status(500).body(resp);
         }
     }
 
@@ -269,6 +292,298 @@ public class TestDataController {
             response.put("message", "Error al registrar usuario: " + e.getMessage());
             response.put("status", "error");
             return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal (debug): crear usuario vía GET para diagnosticar problemas con POST/redirecciones
+     * Uso: GET /api/test/users/register-debug?email=...&password=...&username=...&name=...
+     */
+    @GetMapping("/users/register-debug")
+    public ResponseEntity<Map<String, Object>> registerUserDebug(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String name
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setUsername(username != null && !username.trim().isEmpty() ? username : email.split("@")[0]);
+            user.setName(name);
+            user.setRole("USER");
+
+            log.info("Registrando usuario (debug GET) desde API: {}", email);
+
+            User savedUser = userService.registerUser(user);
+
+            response.put("ok", true);
+            response.put("message", "Usuario registrado exitosamente (debug)");
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", savedUser.getId());
+            userInfo.put("username", savedUser.getUsername());
+            userInfo.put("name", savedUser.getName());
+            userInfo.put("email", savedUser.getEmail());
+            userInfo.put("supabaseId", savedUser.getSupabaseId());
+            response.put("user", userInfo);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            log.warn("Registro debug rechazado: {}", e.getMessage());
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        } catch (Exception e) {
+            log.error("Error al registrar (debug): {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal: crear usuario localmente sin llamar a Supabase (solo para depuración)
+     * Uso: GET /api/test/users/create-local?email=...&password=...&username=...&name=...
+     */
+    @GetMapping("/users/create-local")
+    public ResponseEntity<Map<String, Object>> createLocalUser(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String name
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            if (userRepository.findByEmail(email).isPresent()) {
+                response.put("ok", false);
+                response.put("message", "Email ya existe");
+                return ResponseEntity.status(400).body(response);
+            }
+
+            User user = new User();
+            user.setEmail(email);
+            user.setUsername(username != null && !username.trim().isEmpty() ? username : email.split("@")[0]);
+            user.setName(name);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setRole("USER");
+
+            User saved = userRepository.save(user);
+
+            response.put("ok", true);
+            response.put("message", "Usuario local creado");
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", saved.getId());
+            userInfo.put("email", saved.getEmail());
+            userInfo.put("username", saved.getUsername());
+            userInfo.put("supabaseId", saved.getSupabaseId());
+            response.put("user", userInfo);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error creando usuario local: {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal: crear usuario en Supabase para un usuario local existente y guardar supabaseId
+     * Uso: GET /api/test/users/link-supabase?email=...&password=...
+     */
+    @GetMapping("/users/link-supabase")
+    public ResponseEntity<Map<String, Object>> linkUserToSupabase(
+            @RequestParam String email,
+            @RequestParam String password
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                response.put("ok", false);
+                response.put("message", "No existe usuario local con ese email");
+                return ResponseEntity.status(404).body(response);
+            }
+
+            User user = userOpt.get();
+
+            if (user.getSupabaseId() != null && !user.getSupabaseId().isBlank()) {
+                response.put("ok", false);
+                response.put("message", "Usuario ya tiene supabaseId");
+                response.put("supabaseId", user.getSupabaseId());
+                return ResponseEntity.status(400).body(response);
+            }
+
+            // Llamar Supabase Admin API para crear el usuario
+            String supabaseUid;
+            try {
+                supabaseUid = supabaseAdminService.createUser(user.getEmail(), password);
+            } catch (Exception ex) {
+                log.error("Error creando usuario en Supabase para {}: {}", email, ex.getMessage(), ex);
+                response.put("ok", false);
+                response.put("message", "Error creando usuario en Supabase: " + ex.getMessage());
+                return ResponseEntity.status(502).body(response);
+            }
+
+            if (supabaseUid == null || supabaseUid.isBlank()) {
+                response.put("ok", false);
+                response.put("message", "Supabase no devolvió UID");
+                return ResponseEntity.status(502).body(response);
+            }
+
+            user.setSupabaseId(supabaseUid);
+            userRepository.save(user);
+
+            response.put("ok", true);
+            response.put("message", "Usuario vinculado a Supabase");
+            response.put("supabaseId", supabaseUid);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error en linkUserToSupabase: {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal (debug): crear usuario directamente en Supabase (sin tocar BD local)
+     * Uso: GET /api/test/supabase/create?email=...&password=...
+     */
+    @GetMapping("/supabase/create")
+    public ResponseEntity<Map<String, Object>> createSupabaseOnly(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String uid = supabaseAdminService.createUser(email, password);
+            response.put("ok", uid != null && !uid.isBlank());
+            response.put("supabaseId", uid);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error creando usuario en Supabase (solo): {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(502).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal (debug): asignar manualmente supabaseId a usuario local existente
+     * Uso: GET /api/test/users/set-supabase?email=...&supabaseId=...
+     */
+    @GetMapping("/users/set-supabase")
+    public ResponseEntity<Map<String, Object>> setSupabaseIdForUser(@RequestParam String email, @RequestParam String supabaseId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                response.put("ok", false);
+                response.put("message", "No existe usuario local con ese email");
+                return ResponseEntity.status(404).body(response);
+            }
+            User user = userOpt.get();
+            user.setSupabaseId(supabaseId);
+            userRepository.save(user);
+            response.put("ok", true);
+            response.put("message", "supabaseId asignado");
+            response.put("supabaseId", supabaseId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error en setSupabaseIdForUser: {}", e.getMessage(), e);
+            response.put("ok", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    /**
+     * Endpoint temporal para comprobar estado de seguridad y sesión
+     * GET /api/test/ping
+     */
+    @GetMapping("/ping")
+    public ResponseEntity<Map<String, Object>> ping() {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            resp.put("ok", true);
+            resp.put("authenticated", auth != null && auth.isAuthenticated());
+            resp.put("principal", auth != null ? auth.getPrincipal() : null);
+            resp.put("authorities", auth != null ? auth.getAuthorities() : Collections.emptyList());
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
+     * Devuelve eventos recientes capturados por RequestSecurityDebugFilter
+     * GET /api/test/logs
+     */
+    @GetMapping("/logs")
+    public ResponseEntity<Map<String, Object>> logs() {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            resp.put("ok", true);
+            resp.put("events", com.example.prueba_sprint.filter.RequestSecurityDebugFilter.recentEvents());
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
+     * Endpoint temporal (GET) para establecer contraseña (hash) sin usar POST (debug)
+     * Uso: GET /api/test/users/set-password-get?email=...&password=...
+     */
+    @GetMapping("/users/set-password-get")
+    public ResponseEntity<Map<String, Object>> setPasswordGet(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                resp.put("ok", false);
+                resp.put("message", "No existe usuario con ese email");
+                return ResponseEntity.status(404).body(resp);
+            }
+            User user = userOpt.get();
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+            resp.put("ok", true);
+            resp.put("message", "Contraseña actualizada y hasheada (GET)");
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
+        }
+    }
+
+    /**
+     * Endpoint temporal (GET) para autenticar sin usar POST
+     * Uso: GET /api/test/users/auth?email=...&password=...
+     */
+    @GetMapping("/users/auth")
+    public ResponseEntity<Map<String, Object>> authGet(@RequestParam String email, @RequestParam String password) {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                resp.put("ok", false);
+                resp.put("message", "No existe usuario con ese email");
+                return ResponseEntity.status(404).body(resp);
+            }
+            User user = userOpt.get();
+            boolean matches = passwordEncoder.matches(password, user.getPassword());
+            resp.put("ok", true);
+            resp.put("authenticated", matches);
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            resp.put("ok", false);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(resp);
         }
     }
 

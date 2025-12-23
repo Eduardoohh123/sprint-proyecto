@@ -11,8 +11,13 @@ import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -63,11 +68,18 @@ public class UserService {
 
         // Crear usuario en Supabase Auth primero (Admin API)
         try {
+            log.info("Creando usuario en Supabase: {}", user.getEmail());
             String supabaseUid = supabaseAdminService.createUser(user.getEmail(), user.getPassword());
+            log.info("Supabase create returned uid={} for {}", supabaseUid, user.getEmail());
+            if (supabaseUid == null || supabaseUid.isBlank()) {
+                // Si Supabase no devolvió un id, considerar esto un fallo
+                log.error("Supabase did not return a UID when creating user {}", user.getEmail());
+                throw new IllegalArgumentException("No se recibió id de Supabase al crear el usuario");
+            }
             user.setSupabaseId(supabaseUid);
         } catch (Exception e) {
             // Loguear detalle para que el deploy en Render lo muestre y sea más fácil el diagnóstico
-            System.err.println("Error registrando en Supabase: " + e.getMessage());
+            log.error("Error registrando en Supabase: {}", e.getMessage(), e);
             throw new IllegalArgumentException("No se pudo crear usuario en Supabase: " + e.getMessage());
         }
         
@@ -79,7 +91,24 @@ public class UserService {
             user.setRole("USER");
         }
         
-        return userRepository.save(user);
+        // Intentar guardar localmente; si falla, intentar limpiar el usuario remoto en Supabase para evitar inconsistencias
+        try {
+            User saved = userRepository.save(user);
+            log.info("Usuario registrado localmente: {} (id={})", user.getEmail(), saved.getId());
+            return saved;
+        } catch (Exception e) {
+            log.error("Error guardando usuario localmente para {}: {}", user.getEmail(), e.getMessage(), e);
+            // Intentar eliminar el usuario recién creado en Supabase para evitar usuarios huérfanos
+            try {
+                if (user.getSupabaseId() != null && !user.getSupabaseId().isBlank()) {
+                    supabaseAdminService.deleteUser(user.getSupabaseId());
+                    log.info("Usuario Supabase {} eliminado tras fallo local", user.getSupabaseId());
+                }
+            } catch (Exception ex) {
+                log.error("No se pudo eliminar el usuario Supabase tras fallo local: {}", ex.getMessage(), ex);
+            }
+            throw new RuntimeException("Error guardando usuario local: " + e.getMessage(), e);
+        }
     }
 
     /**
