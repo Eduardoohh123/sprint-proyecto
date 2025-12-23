@@ -125,6 +125,43 @@ public class TestDataController {
             return ResponseEntity.status(500).body(response);
         }
     }
+
+    /**
+     * Endpoint temporal de depuración: devuelve información pública sobre un usuario por email.
+     * Uso: GET /api/test/users/debug?email=...  (dev-only)
+     */
+    @GetMapping("/users/debug")
+    public ResponseEntity<Map<String, Object>> debugUser(@RequestParam String email) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var userOpt = userRepository.findByEmail(email);
+            if (!userOpt.isPresent()) {
+                response.put("found", false);
+                response.put("message", "No existe usuario con ese email");
+                return ResponseEntity.status(404).body(response);
+            }
+            User u = userOpt.get();
+            response.put("found", true);
+            response.put("id", u.getId());
+            response.put("username", u.getUsername());
+            response.put("name", u.getName());
+            response.put("email", u.getEmail());
+            response.put("supabaseId", u.getSupabaseId());
+            response.put("role", u.getRole());
+            response.put("createdAt", u.getCreatedAt());
+            // Indicador de si la contraseña parece hasheada con bcrypt
+            String pw = u.getPassword();
+            boolean looksHashed = (pw != null && pw.startsWith("$2"));
+            response.put("passwordLooksHashed", looksHashed);
+            // No devolver la contraseña ni hashes
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error en users/debug: {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
     /**
      * Insertar datos de prueba
      */
