@@ -100,6 +100,31 @@ public class TestDataController {
             return ResponseEntity.status(500).body(response);
         }
     }
+
+    /**
+     * Endpoint temporal para verificar existencia de la tabla `users` y su recuento.
+     */
+    @GetMapping("/db-check")
+    public ResponseEntity<Map<String, Object>> dbCheck() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            org.springframework.jdbc.core.JdbcTemplate jt = new org.springframework.jdbc.core.JdbcTemplate(this.dataSource);
+            Integer exists = jt.queryForObject("select count(*) from information_schema.tables where table_schema='public' and table_name='users'", Integer.class);
+            response.put("table_exists", exists != null && exists > 0);
+            if (exists != null && exists > 0) {
+                Integer count = jt.queryForObject("select count(*) from users", Integer.class);
+                response.put("users_count", count != null ? count : 0);
+            } else {
+                response.put("users_count", 0);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            log.error("Error en db-check: {}", ex.getMessage(), ex);
+            response.put("ok", false);
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
     /**
      * Insertar datos de prueba
      */
