@@ -17,21 +17,14 @@ public class SchemaRunner {
 
     private final DataSource dataSource;
 
-    @Value("${RUN_SCHEMA_ON_START:false}")
-    private boolean runSchemaOnStart;
-
     public SchemaRunner(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @PostConstruct
     public void runIfRequested() {
-        if (!runSchemaOnStart) {
-            return;
-        }
-
         try {
-            log.info("RUN_SCHEMA_ON_START=true -> ejecutando schema.sql en la base de datos");
+            log.info("Ejecutando schema.sql en la base de datos (temporal)");
             ResourceDatabasePopulator pop = new ResourceDatabasePopulator(new ClassPathResource("schema.sql"));
             pop.execute(dataSource);
             log.info("Ejecución de schema.sql completada correctamente");
